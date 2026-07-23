@@ -819,23 +819,71 @@ function rV(a) {
     a.innerHTML = `<div class="text-center py-16"><div class="text-6xl mb-4">🔒</div><h2 class="text-2xl font-bold">Acceso Restringido</h2><p>Solo Jefes y Gerencia</p></div>`; 
     return; 
   }
-  const lv = lvl(), f = F.val;
-  let list = tasks.filter(t => t && t.status === 'completada' && t.assignee_id !== me.id && (!t.validation_status || t.validation_status === 'pending'));
-  if (lv === 2) { const tm = users.filter(p => p.department_id === dept && lvl(p) === 3).map(p => p.id); list = list.filter(t => tm.includes(t.assignee_id)); }
-  else if (lv === 1) { const al = users.filter(p => lvl(p) === 2 || lvl(p) === 3).map(p => p.id); list = list.filter(t => al.includes(t.assignee_id)); }
-  if (f.responsible && f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
-  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(t => t.title && t.title.toLowerCase().includes(q)); }
   
+  const lv = lvl();
+  const f = F.val;
+  
+  console.log('🔍 rV llamado - Mi nivel:', lv, 'Mi depto:', dept);
+  
+  // Filtrar tareas completadas pendientes de validación
+  let list = tasks.filter(t => 
+    t && 
+    t.status === 'completada' && 
+    t.assignee_id !== me.id && 
+    (!t.validation_status || t.validation_status === 'pending')
+  );
+  
+  console.log('📋 Tareas completadas pendientes:', list.length);
+  
+  // Aplicar lógica de validación jerárquica
+  if (lv === 2) {
+    // Jefe (Nivel 2): valida tareas de su equipo (Nivel 3) de SU departamento
+    console.log('👔 Soy Jefe - Buscando tareas de mi equipo (Nivel 3) en mi departamento');
+    const teamIds = users
+      .filter(p => p.department_id === dept && lvl(p) === 3)
+      .map(p => p.id);
+    console.log('👥 Mi equipo:', teamIds);
+    list = list.filter(t => teamIds.includes(t.assignee_id));
+    
+  } else if (lv === 1) {
+    // Gerencia (Nivel 1): valida tareas de Jefes (Nivel 2) Y de Equipo (Nivel 3) de TODOS los departamentos
+    console.log('🏢 Soy Gerencia - Buscando tareas de Jefes y Equipo de todos los deptos');
+    const allValidatableIds = users
+      .filter(p => lvl(p) === 2 || lvl(p) === 3)
+      .map(p => p.id);
+    console.log('👥 Usuarios validables:', allValidatableIds);
+    list = list.filter(t => allValidatableIds.includes(t.assignee_id));
+  }
+  
+  console.log('✅ Tareas después de filtros jerárquicos:', list.length);
+  
+  // Aplicar filtros adicionales
+  if (f.responsible && f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
+  if (f.search) { 
+    const q = f.search.toLowerCase(); 
+    list = list.filter(t => t.title && t.title.toLowerCase().includes(q)); 
+  }
+  
+  console.log('📊 Tareas finales a mostrar:', list.length);
+  
+  // Renderizar
   a.innerHTML = `
     <div class="fade-in max-w-5xl mx-auto">
       <h2 class="text-2xl font-bold mb-6">✅ Validaciones Pendientes (${list.length})</h2>
       ${rF('val', { dept: false, status: false, frequency: false })}
-      ${list.length === 0 ? '<div class="bg-white rounded-xl p-12 text-center border"><p class="text-slate-500">🎉 Sin pendientes</p></div>' :
+      ${list.length === 0 ? '<div class="bg-white rounded-xl p-12 text-center border"><p class="text-slate-500">🎉 Sin pendientes de validación</p></div>' :
       `<div class="space-y-3">${list.map(t => {
-        const u = users.find(p=>p.id===t.assignee_id), ul = u ? lvl(u) : 3;
-        const b = ul === 1 ? '<span class="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs">Gerencia</span>' : ul === 2 ? '<span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">Jefe</span>' : '<span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">Equipo</span>';
+        const u = users.find(p=>p.id===t.assignee_id);
+        const ul = u ? lvl(u) : 3;
+        const b = ul === 1 ? '<span class="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs">Gerencia</span>' : 
+                  ul === 2 ? '<span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">Jefe</span>' : 
+                  '<span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">Equipo</span>';
         return `<div class="bg-white rounded-xl border p-4 flex justify-between items-center">
-          <div><h3 class="font-bold">${esc(t.title)}</h3><p class="text-sm text-slate-600 mt-1">👤 ${u?.full_name||'?'} · ${b} ·  ${t.completed_at?fmt(t.completed_at):'Sin fecha'}</p><p class="text-xs text-slate-500 mt-1">🏢 ${DEPTS[u?.department_id]?.name || ''}</p></div>
+          <div>
+            <h3 class="font-bold">${esc(t.title)}</h3>
+            <p class="text-sm text-slate-600 mt-1">👤 ${u?.full_name||'?'} · ${b} · 📅 ${t.completed_at?fmt(t.completed_at):'Sin fecha'}</p>
+            <p class="text-xs text-slate-500 mt-1">🏢 ${DEPTS[u?.department_id]?.name || ''}</p>
+          </div>
           <button onclick="openV('${t.id}')" class="px-4 py-2 bg-indigo-500 text-white rounded-lg">Validar</button>
         </div>`;
       }).join('')}</div>`}
