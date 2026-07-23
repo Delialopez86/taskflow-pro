@@ -192,13 +192,13 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
           <option value="ctasctes">📋 Cuentas Corrientes</option>
           <option value="contabilidad">📊 Contabilidad</option>
           <option value="rrhh">👥 RRHH</option>
-          <option value="gerencia"> Gerencia</option>
+          <option value="gerencia">🏢 Gerencia</option>
         </select>
       </div>
       <div><label class="block text-sm font-semibold mb-1">Cargo</label><input type="text" id="uRole" class="w-full px-3 py-2 border rounded-lg"></div>
       <div><label class="block text-sm font-semibold mb-1">Nivel *</label>
         <select id="uLvl" required class="w-full px-3 py-2 border rounded-lg">
-          <option value="3"> Equipo (Nivel 3)</option>
+          <option value="3">👤 Equipo (Nivel 3)</option>
           <option value="2">👔 Jefe (Nivel 2)</option>
           <option value="1">🏢 Gerencia (Nivel 1)</option>
         </select>
@@ -294,7 +294,7 @@ const DEPTS = {
   tesoreria: { name: 'Tesorería', icon: '💰' },
   ctasctes: { name: 'Cuentas Corrientes', icon: '📋' },
   contabilidad: { name: 'Contabilidad', icon: '📊' },
-  rrhh: { name: 'RRHH', icon: '👥' },
+  rrhh: { name: 'RRHH', icon: '' },
   gerencia: { name: 'Gerencia', icon: '🏢' }
 };
 
@@ -439,17 +439,17 @@ function rF(sec, opts = {}) {
   return `
     <div class="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl border border-slate-200 p-4 mb-6 fade-in">
       <div class="flex items-center justify-between mb-3">
-        <h4 class="text-sm font-bold text-slate-700">🔍 Filtros</h4>
+        <h4 class="text-sm font-bold text-slate-700"> Filtros</h4>
         <button onclick="cF('${sec}')" class="text-xs px-3 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg font-semibold">🔄 Limpiar</button>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
         ${opts.search !== false ? `<div class="lg:col-span-2"><label class="block text-xs font-semibold text-slate-600 mb-1">🔍 BÚSQUEDA</label><input type="text" placeholder="Buscar..." value="${f.search || ''}" oninput="F['${sec}'].search=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"></div>` : ''}
         ${opts.dept !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🏢 DEPTO</label><select onchange="F['${sec}'].dept=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${dOpts}</select></div>` : ''}
         ${opts.responsible !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👤 RESPONSABLE</label><select onchange="F['${sec}'].responsible=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${rOpts}</select></div>` : ''}
-        ${opts.status !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1"> ESTADO</label><select onchange="F['${sec}'].status=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="pendiente" ${f.status === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option><option value="proceso" ${f.status === 'proceso' ? 'selected' : ''}>🔄 Proceso</option><option value="completada" ${f.status === 'completada' ? 'selected' : ''}>✅ Completada</option><option value="validated" ${f.status === 'validated' ? 'selected' : ''}>✓ Validada</option><option value="no_aplica" ${f.status === 'no_aplica' ? 'selected' : ''}>➖ No Aplica</option></select></div>` : ''}
-        ${opts.frequency !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔄 FRECUENCIA</label><select onchange="F['${sec}'].frequency=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="diaria" ${f.frequency === 'diaria' ? 'selected' : ''}>📅 Diaria</option><option value="semanal" ${f.frequency === 'semanal' ? 'selected' : ''}>📆 Semanal</option><option value="quincenal" ${f.frequency === 'quincenal' ? 'selected' : ''}> Quincenal</option><option value="mensual" ${f.frequency === 'mensual' ? 'selected' : ''}>📅 Mensual</option><option value="ocasional" ${f.frequency === 'ocasional' ? 'selected' : ''}>🔁 Ocasional</option><option value="unica" ${f.frequency === 'unica' ? 'selected' : ''}>📌 Única</option></select></div>` : ''}
-        ${opts.roleLevel ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👔 NIVEL</label><select onchange="F['${sec}'].roleLevel=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="1" ${f.roleLevel === '1' ? 'selected' : ''}>🏢 Gerencia</option><option value="2" ${f.roleLevel === '2' ? 'selected' : ''}>👔 Jefe</option><option value="3" ${f.roleLevel === '3' ? 'selected' : ''}> Equipo</option></select></div>` : ''}
-        ${opts.category ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📂 CATEGORÍA</label><select onchange="F['${sec}'].category=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="general" ${f.category === 'general' ? 'selected' : ''}> General</option><option value="incidencia" ${f.category === 'incidencia' ? 'selected' : ''}>⚠️ Incidencia</option><option value="observacion" ${f.category === 'observacion' ? 'selected' : ''}>👁️ Observación</option><option value="decision" ${f.category === 'decision' ? 'selected' : ''}>🎯 Decisión</option><option value="reunion" ${f.category === 'reunion' ? 'selected' : ''}>🤝 Reunión</option><option value="otro" ${f.category === 'otro' ? 'selected' : ''}>📌 Otro</option></select></div>` : ''}
+        ${opts.status !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📌 ESTADO</label><select onchange="F['${sec}'].status=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="pendiente" ${f.status === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option><option value="proceso" ${f.status === 'proceso' ? 'selected' : ''}>🔄 Proceso</option><option value="completada" ${f.status === 'completada' ? 'selected' : ''}>✅ Completada</option><option value="validated" ${f.status === 'validated' ? 'selected' : ''}>✓ Validada</option><option value="no_aplica" ${f.status === 'no_aplica' ? 'selected' : ''}>➖ No Aplica</option></select></div>` : ''}
+        ${opts.frequency !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔄 FRECUENCIA</label><select onchange="F['${sec}'].frequency=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="diaria" ${f.frequency === 'diaria' ? 'selected' : ''}> Diaria</option><option value="semanal" ${f.frequency === 'semanal' ? 'selected' : ''}>📆 Semanal</option><option value="quincenal" ${f.frequency === 'quincenal' ? 'selected' : ''}>📆 Quincenal</option><option value="mensual" ${f.frequency === 'mensual' ? 'selected' : ''}>📅 Mensual</option><option value="ocasional" ${f.frequency === 'ocasional' ? 'selected' : ''}>🔁 Ocasional</option><option value="unica" ${f.frequency === 'unica' ? 'selected' : ''}>📌 Única</option></select></div>` : ''}
+        ${opts.roleLevel ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👔 NIVEL</label><select onchange="F['${sec}'].roleLevel=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="1" ${f.roleLevel === '1' ? 'selected' : ''}>🏢 Gerencia</option><option value="2" ${f.roleLevel === '2' ? 'selected' : ''}> Jefe</option><option value="3" ${f.roleLevel === '3' ? 'selected' : ''}>👤 Equipo</option></select></div>` : ''}
+        ${opts.category ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📂 CATEGORÍA</label><select onchange="F['${sec}'].category=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="general" ${f.category === 'general' ? 'selected' : ''}>📋 General</option><option value="incidencia" ${f.category === 'incidencia' ? 'selected' : ''}>⚠️ Incidencia</option><option value="observacion" ${f.category === 'observacion' ? 'selected' : ''}>️ Observación</option><option value="decision" ${f.category === 'decision' ? 'selected' : ''}>🎯 Decisión</option><option value="reunion" ${f.category === 'reunion' ? 'selected' : ''}>🤝 Reunión</option><option value="otro" ${f.category === 'otro' ? 'selected' : ''}>📌 Otro</option></select></div>` : ''}
         ${opts.isAdmin ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔑 ADMIN</label><select onchange="F['${sec}'].isAdmin=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="true" ${f.isAdmin === 'true' ? 'selected' : ''}>✅ Admins</option><option value="false" ${f.isAdmin === 'false' ? 'selected' : ''}> No Admins</option></select></div>` : ''}
       </div>
     </div>
@@ -460,6 +460,7 @@ function cF(s) { F[s] = { search: '', status: 'all', frequency: 'all', responsib
 function rTabs() {
   const tabs = [
     { id: 'matrix', label: '📅 Matriz' },
+    { id: 'dept', label: '📊 ' + (DEPTS[dept]?.name || dept) },
     { id: 'val', label: '✅ Validaciones' },
     { id: 'log', label: '📝 Bitácora' },
     { id: 'team', label: '👥 Equipo' }
@@ -474,7 +475,7 @@ function go(t) { tab = t; rTabs(); render(); }
 function render() {
   const a = document.getElementById('content');
   try {
-    const v = { matrix: rM, val: rV, log: rL, team: rT, admin: rA };
+    const v = { matrix: rM, dept: rDept, val: rV, log: rL, team: rT, admin: rA };
     if (v[tab]) v[tab](a);
   } catch (err) {
     console.error('Render error:', err);
@@ -560,7 +561,7 @@ function rM(a) {
             <p class="text-3xl font-bold text-orange-600">${pV.length}</p>
           </div>
           <div class="bg-white rounded-xl p-4 border shadow-sm">
-            <p class="text-xs text-slate-500 font-semibold"> DÍAS</p>
+            <p class="text-xs text-slate-500 font-semibold">📅 DÍAS</p>
             <p class="text-3xl font-bold text-slate-600">7</p>
           </div>
         </div>
@@ -569,7 +570,7 @@ function rM(a) {
           <div class="flex flex-wrap gap-2 text-xs">
             <span class="px-2 py-1 rounded st-comp">✅ Realizado</span>
             <span class="px-2 py-1 rounded st-proc">🔄 En proceso</span>
-            <span class="px-2 py-1 rounded st-pend">⏳ Pendiente</span>
+            <span class="px-2 py-1 rounded st-pend"> Pendiente</span>
             <span class="px-2 py-1 rounded st-val">✓ Validado</span>
             <span class="px-2 py-1 rounded st-na">➖ No Aplica</span>
             <span class="px-2 py-1 rounded bg-blue-200 text-blue-800">📅 Hoy (editable)</span>
@@ -645,7 +646,7 @@ function rM(a) {
               let st = 'pendiente', txt = 'Pendiente', cls = 'st-pend';
               
               if (d < sd) { 
-                st = 'futura'; txt = ''; cls = 'cell-fut'; 
+                st = 'futura'; txt = '⏪'; cls = 'cell-fut'; 
               } else if (td) {
                 if (td.validation_status === 'validated') { 
                   st = 'validated'; txt = '✓'; cls = 'st-val'; 
@@ -670,7 +671,10 @@ function rM(a) {
             });
             
             h += `<td class="p-2 border-r">
-              <button onclick="delT('${tpl.id}')" class="text-red-600 hover:text-red-800 text-xs">🗑️</button>
+              <div class="flex gap-2">
+                <button onclick="openT('${tpl.id}')" class="text-indigo-600 hover:text-indigo-800 text-xs" title="Editar">✏️</button>
+                <button onclick="delT('${tpl.id}')" class="text-red-600 hover:text-red-800 text-xs" title="Eliminar">🗑️</button>
+              </div>
             </td>`;
             h += `</tr>`;
           });
@@ -691,14 +695,128 @@ function rM(a) {
   }
 }
 
+function rDept(a) {
+  try {
+    const f = F.matrix;
+    let list = tasks.filter(t => t && t.department_id === dept);
+    
+    if (f.responsible && f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
+    if (f.frequency && f.frequency !== 'all') list = list.filter(t => t.frequency === f.frequency);
+    if (f.status && f.status !== 'all') list = list.filter(t => t.status === f.status || (f.status === 'validated' && t.validation_status === 'validated'));
+    if (f.search) { 
+      const q = f.search.toLowerCase(); 
+      list = list.filter(t => t.title && t.title.toLowerCase().includes(q)); 
+    }
+    
+    a.innerHTML = `
+      <div class="fade-in">
+        <div class="mb-6 flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold">📊 ${DEPTS[dept]?.name || dept}</h2>
+            <p class="text-slate-500">${list.length} tareas en total</p>
+          </div>
+          <button onclick="openT()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Nueva Tarea</button>
+        </div>
+        ${rF('matrix', { dept: false })}
+        <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b">
+              <tr>
+                <th class="text-left p-3">Tarea</th>
+                <th class="text-left p-3">Responsable</th>
+                <th class="text-left p-3">Frecuencia</th>
+                <th class="text-left p-3">Inicio</th>
+                <th class="text-left p-3">Límite</th>
+                <th class="text-left p-3">Estado</th>
+                <th class="text-left p-3">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              ${list.length === 0 ? '<tr><td colspan="7" class="p-8 text-center text-gray-500">No hay tareas</td></tr>' :
+                list.map(t => {
+                  const assignee = users.find(p => p.id === t.assignee_id);
+                  const statusClass = t.validation_status === 'validated' ? 'st-val' : 
+                                     t.status === 'completada' ? 'st-comp' :
+                                     t.status === 'proceso' ? 'st-proc' :
+                                     t.status === 'no_aplica' ? 'st-na' : 'st-pend';
+                  return `
+                    <tr class="hover:bg-gray-50">
+                      <td class="p-3">
+                        <div class="font-semibold">${esc(t.title)}</div>
+                        ${t.description ? `<div class="text-xs text-gray-500">${esc(t.description)}</div>` : ''}
+                      </td>
+                      <td class="p-3 text-sm">${assignee?.full_name || 'Sin asignar'}</td>
+                      <td class="p-3 text-sm">${fL(t.frequency)}</td>
+                      <td class="p-3 text-sm">${t.start_date ? fmt(t.start_date) : '-'}</td>
+                      <td class="p-3 text-sm">${t.due_date ? fmt(t.due_date) : '-'}</td>
+                      <td class="p-3">
+                        <select onchange="updateTaskStatus('${t.id}', this.value)" class="px-2 py-1 rounded-full text-xs font-semibold ${statusClass} border-0 cursor-pointer text-white">
+                          <option value="pendiente" ${t.status === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
+                          <option value="proceso" ${t.status === 'proceso' ? 'selected' : ''}>🔄 Proceso</option>
+                          <option value="completada" ${t.status === 'completada' ? 'selected' : ''}>✅ Completada</option>
+                          <option value="no_aplica" ${t.status === 'no_aplica' ? 'selected' : ''}>➖ No Aplica</option>
+                        </select>
+                      </td>
+                      <td class="p-3">
+                        <div class="flex gap-2">
+                          <button onclick="openT('${t.id}')" class="text-indigo-600 hover:underline text-sm">✏️ Editar</button>
+                          <button onclick="delT('${t.id}')" class="text-red-600 hover:underline text-sm">🗑️ Eliminar</button>
+                        </div>
+                      </td>
+                    </tr>
+                  `;
+                }).join('')
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    console.error('Dept render error:', err);
+    a.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-xl p-6"><p class="text-red-700 font-semibold">Error: ${err.message}</p></div>`;
+  }
+}
+
+async function updateTaskStatus(id, newStatus) {
+  try {
+    const ud = { status: newStatus };
+    if (['completada','no_aplica'].includes(newStatus)) {
+      ud.completed_at = new Date().toISOString();
+      ud.completed_by = me.id;
+      if (lvl() === 1) {
+        ud.validation_status = 'validated';
+        ud.validated_at = new Date().toISOString();
+        ud.validated_by = me.id;
+      } else {
+        ud.validation_status = 'pending';
+      }
+    } else if (newStatus === 'pendiente' || newStatus === 'proceso') {
+      ud.validation_status = null;
+      ud.validated_at = null;
+      ud.validated_by = null;
+    }
+    
+    const { error } = await SB.from('tasks').update(ud).eq('id', id);
+    if (error) throw error;
+    
+    await load();
+    render();
+    toast('✅ Actualizado');
+  } catch (err) {
+    console.error('Error updating status:', err);
+    toast('❌ Error: ' + err.message);
+  }
+}
+
 function fL(f) { 
   return { 
-    diaria: '📅', 
+    diaria: '', 
     semanal: '📆', 
     quincenal: '📆', 
     mensual: '📅', 
     ocasional: '🔁', 
-    unica: '📌' 
+    unica: '' 
   }[f] || f; 
 }
 
@@ -706,7 +824,7 @@ function openUl() { updUlSt(); document.getElementById('ulModal').classList.remo
 
 function openM(tid, date, mode) {
   const t = tasks.find(x => x.id === tid);
-  if (!t) { toast('❌ No encontrada'); return; }
+  if (!t) { toast(' No encontrada'); return; }
   mTask = t; mDate = date; mMode = mode;
   document.getElementById('mDate').textContent = fmt(date);
   document.getElementById('mTask').textContent = t.title;
@@ -754,7 +872,7 @@ async function setStatus(ns) {
       ud.validated_by = null;
     }
     
-    console.log(' Datos a enviar:', ud);
+    console.log('📦 Datos a enviar:', ud);
     
     let result;
     
@@ -786,8 +904,8 @@ async function setStatus(ns) {
       console.log('📤 Resultado UPDATE:', result);
       
       if (result.error) {
-        console.error(' Error UPDATE:', result.error);
-        toast(' Error al actualizar: ' + result.error.message);
+        console.error('❌ Error UPDATE:', result.error);
+        toast('❌ Error al actualizar: ' + result.error.message);
         return;
       }
       
@@ -797,7 +915,7 @@ async function setStatus(ns) {
     console.log('🔄 Cerrando modal y recargando...');
     closeM();
     
-    console.log('📥 Llamando a load()...');
+    console.log(' Llamando a load()...');
     await load();
     console.log('📊 Tareas recargadas:', tasks.length);
     
@@ -825,7 +943,6 @@ function rV(a) {
   
   console.log('🔍 rV llamado - Mi nivel:', lv, 'Mi depto:', dept);
   
-  // Filtrar tareas completadas pendientes de validación
   let list = tasks.filter(t => 
     t && 
     t.status === 'completada' && 
@@ -835,10 +952,8 @@ function rV(a) {
   
   console.log('📋 Tareas completadas pendientes:', list.length);
   
-  // Aplicar lógica de validación jerárquica
   if (lv === 2) {
-    // Jefe (Nivel 2): valida tareas de su equipo (Nivel 3) de SU departamento
-    console.log('👔 Soy Jefe - Buscando tareas de mi equipo (Nivel 3) en mi departamento');
+    console.log(' Soy Jefe - Buscando tareas de mi equipo (Nivel 3) en mi departamento');
     const teamIds = users
       .filter(p => p.department_id === dept && lvl(p) === 3)
       .map(p => p.id);
@@ -846,7 +961,6 @@ function rV(a) {
     list = list.filter(t => teamIds.includes(t.assignee_id));
     
   } else if (lv === 1) {
-    // Gerencia (Nivel 1): valida tareas de Jefes (Nivel 2) Y de Equipo (Nivel 3) de TODOS los departamentos
     console.log('🏢 Soy Gerencia - Buscando tareas de Jefes y Equipo de todos los deptos');
     const allValidatableIds = users
       .filter(p => lvl(p) === 2 || lvl(p) === 3)
@@ -857,7 +971,6 @@ function rV(a) {
   
   console.log('✅ Tareas después de filtros jerárquicos:', list.length);
   
-  // Aplicar filtros adicionales
   if (f.responsible && f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
   if (f.search) { 
     const q = f.search.toLowerCase(); 
@@ -866,7 +979,6 @@ function rV(a) {
   
   console.log('📊 Tareas finales a mostrar:', list.length);
   
-  // Renderizar
   a.innerHTML = `
     <div class="fade-in max-w-5xl mx-auto">
       <h2 class="text-2xl font-bold mb-6">✅ Validaciones Pendientes (${list.length})</h2>
@@ -915,10 +1027,10 @@ function rL(a) {
       <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold">📝 Mi Bitácora Personal</h2><p class="text-slate-500">Privada - solo tú la ves</p></div><button onclick="document.getElementById('logModal').classList.remove('hidden')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Nueva</button></div>
       ${rF('log', { dept: false, status: false, frequency: false, responsible: false, category: true })}
       <div class="space-y-3">
-        ${list.length === 0 ? `<div class="bg-white rounded-xl p-12 text-center border"><div class="text-6xl mb-4"></div><p class="text-slate-500 font-semibold">Vacía</p></div>` : list.map(e => `
+        ${list.length === 0 ? `<div class="bg-white rounded-xl p-12 text-center border"><div class="text-6xl mb-4">📝</div><p class="text-slate-500 font-semibold">Vacía</p></div>` : list.map(e => `
           <div class="bg-white rounded-xl border p-4 hover:shadow-md transition-shadow">
             <div class="flex justify-between items-start mb-3">
-              <div class="flex items-center gap-2"><span class="text-xs px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-semibold">${e.category}</span><span class="text-xs text-slate-400">📅 ${fmt(e.entry_date)}</span></div>
+              <div class="flex items-center gap-2"><span class="text-xs px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-semibold">${e.category}</span><span class="text-xs text-slate-400"> ${fmt(e.entry_date)}</span></div>
               <button onclick="delL('${e.id}')" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-sm">🗑️</button>
             </div>
             <p class="text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">${esc(e.content)}</p>
@@ -975,7 +1087,7 @@ function rA(a) {
           <thead class="bg-gray-50 border-b"><tr><th class="text-left p-3">Nombre</th><th class="text-left p-3">Email</th><th class="text-left p-3">Depto</th><th class="text-left p-3">Cargo</th><th class="text-left p-3">Nivel</th><th class="text-left p-3">Acciones</th></tr></thead>
           <tbody class="divide-y">
             ${list.map(p => {
-              const b = p.role_level === 1 ? '<span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">🏢 Gerencia</span>' : p.role_level === 2 ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">👔 Jefe</span>' : '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">👤 Equipo</span>';
+              const b = p.role_level === 1 ? '<span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">🏢 Gerencia</span>' : p.role_level === 2 ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs"> Jefe</span>' : '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs"> Equipo</span>';
               return `<tr class="hover:bg-gray-50"><td class="p-3 font-semibold">${p.full_name}</td><td class="p-3 text-sm text-gray-600">${p.email}</td><td class="p-3 text-sm">${DEPTS[p.department_id]?.icon || ''} ${DEPTS[p.department_id]?.name || p.department_id}</td><td class="p-3 text-sm">${p.role || '-'}</td><td class="p-3">${b} ${p.is_admin ? '<span class="ml-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Admin</span>' : ''}</td><td class="p-3"><div class="flex gap-2"><button onclick="editU('${p.id}')" class="text-indigo-600 hover:underline text-sm">✏️ Editar</button>${p.id !== me.id ? `<button onclick="delU('${p.id}')" class="text-red-600 hover:underline text-sm">🗑️</button>` : '<span class="text-gray-400 text-sm">(Tú)</span>'}</div></td></tr>`;
             }).join('')}
           </tbody>
@@ -997,7 +1109,7 @@ document.getElementById('uForm').addEventListener('submit', async (e) => {
     document.getElementById('uModal').classList.add('hidden'); document.getElementById('uForm').reset(); await load(); render();
   } catch (err) { toast('❌ ' + err.message); }
 });
-async function delU(id) { if (!confirm('¿Eliminar?')) return; await SB.from('profiles').delete().eq('id', id); toast('🗑️ Eliminado'); await load(); render(); }
+async function delU(id) { if (!confirm('¿Eliminar?')) return; await SB.from('profiles').delete().eq('id', id); toast('️ Eliminado'); await load(); render(); }
 
 function toggleP(id) { const p = document.getElementById(id); p.classList.toggle('hidden'); if (!p.classList.contains('hidden')) { if (id === 'notifPanel') rNotif(); if (id === 'chatPanel') { rChatU(); rChatM(); } } }
 
@@ -1036,4 +1148,3 @@ document.addEventListener('click', (e) => {
 </script>
 </body>
 </html>
-
