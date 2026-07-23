@@ -727,12 +727,17 @@ function closeM() {
 }
 
 async function setStatus(ns) {
-  if (!mTask || !mDate) return;
+  console.log('🔄 setStatus llamado con:', { ns, mTask, mDate, mMode });
+  
+  if (!mTask || !mDate) {
+    console.error('❌ Faltan datos:', { mTask, mDate });
+    toast('❌ Error: datos incompletos');
+    return;
+  }
+  
   try {
-    // 1. Preparar los datos de actualización
     const ud = { status: ns };
     
-    // 2. Manejar casos especiales
     if (['completada','no_aplica'].includes(ns)) {
       ud.completed_at = new Date().toISOString();
       ud.completed_by = me.id;
@@ -749,28 +754,55 @@ async function setStatus(ns) {
       ud.validated_by = null;
     }
     
-    // 3. Determinar si es creación o actualización
+    let result;
+    
     if (mMode === 'create') {
       ud.due_date = mDate;
-      ud.title = mTask.title + ' (' + fmt(mDate) + ')';
-      console.log('Creando nueva instancia:', ud);
-      const { error } = await SB.from('tasks').insert(ud);
-      if (error) throw error;
+      ud.start_date = mTask.start_date || mDate;
+      ud.frequency = mTask.frequency;
+      ud.priority = mTask.priority || 'media';
+      ud.department_id = mTask.department_id;
+      ud.assignee_id = mTask.assignee_id;
+      ud.created_by = me.id;
+      ud.title = mTask.title;
+      
+      console.log('📝 INSERTANDO nueva tarea:', ud);
+      result = await SB.from('tasks').insert(ud);
     } else {
-      console.log('Actualizando tarea:', { id: mTask.id, update: ud });
-      const { error } = await SB.from('tasks').update(ud).eq('id', mTask.id);
-      if (error) throw error;
+      console.log('️ ACTUALIZANDO tarea:', { id: mTask.id, update: ud });
+      result = await SB.from('tasks').update(ud).eq('id', mTask.id);
     }
     
-    // 4. Cerrar modal y refrescar
+    console.log('📤 Resultado:', result);
+    
+    if (result.error) {
+      console.error('❌ Error de Supabase:', result.error);
+      toast('❌ Error: ' + result.error.message);
+      return;
+    }
+    
+    console.log('✅ Éxito, recargando datos...');
+    
+    // Forzar recarga completa
     closeM();
-    await load();  // Recargar datos completos
-    render();      // Volver a dibujar la matriz
-    toast('✅ Estado actualizado correctamente');
+    await load();
+    render();
+    toast('✅ Estado actualizado');
+    
+    // Verificación: buscar la tarea en los datos recargados
+    setTimeout(() => {
+      if (mMode === 'create') {
+        const nueva = tasks.find(t => t.due_date === mDate && t.title === mTask.title);
+        console.log('🔍 Verificación - Nueva tarea encontrada:', nueva);
+      } else {
+        const actualizada = tasks.find(t => t.id === mTask.id);
+        console.log('🔍 Verificación - Tarea actualizada:', actualizada);
+      }
+    }, 500);
     
   } catch (err) {
-    console.error('Error al actualizar estado:', err);
-    toast('❌ Error al actualizar: ' + err.message);
+    console.error('❌ Error completo:', err);
+    toast('❌ Error: ' + err.message);
   }
 }
 
