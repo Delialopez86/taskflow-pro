@@ -92,7 +92,9 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
       <div id="tabs" class="flex gap-1 overflow-x-auto py-2"></div>
     </div>
   </nav>
-  <main class="max-w-[1600px] mx-auto px-4 py-6"><div id="content"></div></main>
+  <main class="max-w-[1600px] mx-auto px-4 py-6">
+    <div id="content"></div>
+  </main>
 </div>
 
 <div id="taskModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
@@ -107,10 +109,10 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
         <select id="tDept" required class="w-full px-3 py-2 border rounded-lg">
           <option value="">Seleccionar...</option>
           <option value="tesoreria">💰 Tesorería</option>
-          <option value="ctasctes"> Cuentas Corrientes</option>
+          <option value="ctasctes">📋 Cuentas Corrientes</option>
           <option value="contabilidad">📊 Contabilidad</option>
           <option value="rrhh">👥 RRHH</option>
-          <option value="gerencia">🏢 Gerencia</option>
+          <option value="gerencia"> Gerencia</option>
         </select>
       </div>
       <div class="grid grid-cols-2 gap-3">
@@ -125,14 +127,14 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
             <option value="quincenal">📆 Quincenal</option>
             <option value="mensual">📅 Mensual</option>
             <option value="ocasional">🔁 Ocasional</option>
-            <option value="unica"> Única vez</option>
+            <option value="unica">📌 Única vez</option>
           </select>
         </div>
         <div><label class="block text-sm font-semibold mb-1">Prioridad</label>
           <select id="tPri" class="w-full px-3 py-2 border rounded-lg">
             <option value="baja">🟢 Baja</option>
             <option value="media" selected>🟡 Media</option>
-            <option value="alta">🔴 Alta</option>
+            <option value="alta"> Alta</option>
             <option value="urgente">🚨 Urgente</option>
           </select>
         </div>
@@ -153,9 +155,9 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
     <div id="mAct" class="mb-3 text-xs font-semibold px-3 py-2 rounded-lg"></div>
     <div class="space-y-2">
       <button onclick="setStatus('pendiente')" class="w-full px-4 py-3 bg-red-500 text-white rounded-lg font-semibold">⏳ Pendiente</button>
-      <button onclick="setStatus('proceso')" class="w-full px-4 py-3 bg-yellow-500 text-white rounded-lg font-semibold"> En proceso</button>
+      <button onclick="setStatus('proceso')" class="w-full px-4 py-3 bg-yellow-500 text-white rounded-lg font-semibold">🔄 En proceso</button>
       <button onclick="setStatus('completada')" class="w-full px-4 py-3 bg-emerald-500 text-white rounded-lg font-semibold">✅ Realizado</button>
-      <button onclick="setStatus('no_aplica')" class="w-full px-4 py-3 bg-slate-500 text-white rounded-lg font-semibold">➖ No Aplica</button>
+      <button onclick="setStatus('no_aplica')" class="w-full px-4 py-3 bg-slate-500 text-white rounded-lg font-semibold"> No Aplica</button>
       <button onclick="closeM()" class="w-full px-4 py-3 bg-slate-200 text-slate-700 rounded-lg font-semibold">Cancelar</button>
     </div>
   </div>
@@ -189,15 +191,15 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
           <option value="tesoreria">💰 Tesorería</option>
           <option value="ctasctes">📋 Cuentas Corrientes</option>
           <option value="contabilidad">📊 Contabilidad</option>
-          <option value="rrhh"> RRHH</option>
-          <option value="gerencia">🏢 Gerencia</option>
+          <option value="rrhh">👥 RRHH</option>
+          <option value="gerencia"> Gerencia</option>
         </select>
       </div>
       <div><label class="block text-sm font-semibold mb-1">Cargo</label><input type="text" id="uRole" class="w-full px-3 py-2 border rounded-lg"></div>
       <div><label class="block text-sm font-semibold mb-1">Nivel *</label>
         <select id="uLvl" required class="w-full px-3 py-2 border rounded-lg">
-          <option value="3">👤 Equipo (Nivel 3)</option>
-          <option value="2"> Jefe (Nivel 2)</option>
+          <option value="3"> Equipo (Nivel 3)</option>
+          <option value="2">👔 Jefe (Nivel 2)</option>
           <option value="1">🏢 Gerencia (Nivel 1)</option>
         </select>
       </div>
@@ -220,15 +222,15 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
       <div><label class="block text-sm font-semibold mb-1">📅 Fecha</label><input type="date" id="logD" required class="w-full px-3 py-2 border rounded-lg"></div>
       <div><label class="block text-sm font-semibold mb-1">📂 Categoría</label>
         <select id="logC" class="w-full px-3 py-2 border rounded-lg">
-          <option value="general">📋 General</option>
-          <option value="incidencia">️ Incidencia</option>
+          <option value="general"> General</option>
+          <option value="incidencia">⚠️ Incidencia</option>
           <option value="observacion">👁️ Observación</option>
-          <option value="decision"> Decisión</option>
+          <option value="decision">🎯 Decisión</option>
           <option value="reunion">🤝 Reunión</option>
           <option value="otro">📌 Otro</option>
         </select>
       </div>
-      <div><label class="block text-sm font-semibold mb-1">📝 Contenido *</label><textarea id="logT" required rows="4" class="w-full px-3 py-2 border rounded-lg"></textarea></div>
+      <div><label class="block text-sm font-semibold mb-1"> Contenido *</label><textarea id="logT" required rows="4" class="w-full px-3 py-2 border rounded-lg"></textarea></div>
       <div class="flex gap-3 pt-2">
         <button type="button" onclick="document.getElementById('logModal').classList.add('hidden')" class="flex-1 py-2 border rounded-lg font-semibold">Cancelar</button>
         <button type="submit" class="flex-1 py-2 bg-indigo-600 text-white rounded-lg font-semibold">💾 Guardar</button>
@@ -273,7 +275,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
 <div id="chatPanel" class="hidden fixed top-20 right-4 w-96 bg-white rounded-2xl shadow-2xl z-50 border h-[500px] flex flex-col slide-in">
   <div class="p-4 border-b flex items-center justify-between">
     <h3 class="font-bold">💬 Chat</h3>
-    <button onclick="document.getElementById('chatPanel').classList.add('hidden')" class="p-2 hover:bg-gray-100 rounded-lg"></button>
+    <button onclick="document.getElementById('chatPanel').classList.add('hidden')" class="p-2 hover:bg-gray-100 rounded-lg">✕</button>
   </div>
   <div id="chatU" class="border-b p-2 max-h-32 overflow-y-auto"></div>
   <div id="chatM" class="flex-1 p-4 overflow-y-auto bg-slate-50"></div>
@@ -420,7 +422,7 @@ function doUnlock() {
 }
 function doReset() {
   localStorage.removeItem('tf_ul');
-  document.getElementById('ulSt').innerHTML = '<strong>️</strong> Bloqueado por defecto.';
+  document.getElementById('ulSt').innerHTML = '<strong>ℹ️</strong> Bloqueado por defecto.';
   document.getElementById('ulModal').classList.add('hidden');
   toast('🔄 Restablecido'); render();
 }
@@ -444,11 +446,11 @@ function rF(sec, opts = {}) {
         ${opts.search !== false ? `<div class="lg:col-span-2"><label class="block text-xs font-semibold text-slate-600 mb-1">🔍 BÚSQUEDA</label><input type="text" placeholder="Buscar..." value="${f.search || ''}" oninput="F['${sec}'].search=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"></div>` : ''}
         ${opts.dept !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🏢 DEPTO</label><select onchange="F['${sec}'].dept=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${dOpts}</select></div>` : ''}
         ${opts.responsible !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👤 RESPONSABLE</label><select onchange="F['${sec}'].responsible=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${rOpts}</select></div>` : ''}
-        ${opts.status !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📌 ESTADO</label><select onchange="F['${sec}'].status=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="pendiente" ${f.status === 'pendiente' ? 'selected' : ''}> Pendiente</option><option value="proceso" ${f.status === 'proceso' ? 'selected' : ''}>🔄 Proceso</option><option value="completada" ${f.status === 'completada' ? 'selected' : ''}>✅ Completada</option><option value="validated" ${f.status === 'validated' ? 'selected' : ''}>✓ Validada</option><option value="no_aplica" ${f.status === 'no_aplica' ? 'selected' : ''}>➖ No Aplica</option></select></div>` : ''}
+        ${opts.status !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1"> ESTADO</label><select onchange="F['${sec}'].status=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="pendiente" ${f.status === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option><option value="proceso" ${f.status === 'proceso' ? 'selected' : ''}>🔄 Proceso</option><option value="completada" ${f.status === 'completada' ? 'selected' : ''}>✅ Completada</option><option value="validated" ${f.status === 'validated' ? 'selected' : ''}>✓ Validada</option><option value="no_aplica" ${f.status === 'no_aplica' ? 'selected' : ''}>➖ No Aplica</option></select></div>` : ''}
         ${opts.frequency !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔄 FRECUENCIA</label><select onchange="F['${sec}'].frequency=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="diaria" ${f.frequency === 'diaria' ? 'selected' : ''}>📅 Diaria</option><option value="semanal" ${f.frequency === 'semanal' ? 'selected' : ''}>📆 Semanal</option><option value="quincenal" ${f.frequency === 'quincenal' ? 'selected' : ''}> Quincenal</option><option value="mensual" ${f.frequency === 'mensual' ? 'selected' : ''}>📅 Mensual</option><option value="ocasional" ${f.frequency === 'ocasional' ? 'selected' : ''}>🔁 Ocasional</option><option value="unica" ${f.frequency === 'unica' ? 'selected' : ''}>📌 Única</option></select></div>` : ''}
-        ${opts.roleLevel ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1"> NIVEL</label><select onchange="F['${sec}'].roleLevel=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="1" ${f.roleLevel === '1' ? 'selected' : ''}>🏢 Gerencia</option><option value="2" ${f.roleLevel === '2' ? 'selected' : ''}>👔 Jefe</option><option value="3" ${f.roleLevel === '3' ? 'selected' : ''}>👤 Equipo</option></select></div>` : ''}
-        ${opts.category ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📂 CATEGORÍA</label><select onchange="F['${sec}'].category=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="general" ${f.category === 'general' ? 'selected' : ''}>📋 General</option><option value="incidencia" ${f.category === 'incidencia' ? 'selected' : ''}>⚠️ Incidencia</option><option value="observacion" ${f.category === 'observacion' ? 'selected' : ''}>👁️ Observación</option><option value="decision" ${f.category === 'decision' ? 'selected' : ''}>🎯 Decisión</option><option value="reunion" ${f.category === 'reunion' ? 'selected' : ''}> Reunión</option><option value="otro" ${f.category === 'otro' ? 'selected' : ''}>📌 Otro</option></select></div>` : ''}
-        ${opts.isAdmin ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔑 ADMIN</label><select onchange="F['${sec}'].isAdmin=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="true" ${f.isAdmin === 'true' ? 'selected' : ''}>✅ Admins</option><option value="false" ${f.isAdmin === 'false' ? 'selected' : ''}>👤 No Admins</option></select></div>` : ''}
+        ${opts.roleLevel ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👔 NIVEL</label><select onchange="F['${sec}'].roleLevel=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="1" ${f.roleLevel === '1' ? 'selected' : ''}>🏢 Gerencia</option><option value="2" ${f.roleLevel === '2' ? 'selected' : ''}>👔 Jefe</option><option value="3" ${f.roleLevel === '3' ? 'selected' : ''}> Equipo</option></select></div>` : ''}
+        ${opts.category ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📂 CATEGORÍA</label><select onchange="F['${sec}'].category=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="general" ${f.category === 'general' ? 'selected' : ''}> General</option><option value="incidencia" ${f.category === 'incidencia' ? 'selected' : ''}>⚠️ Incidencia</option><option value="observacion" ${f.category === 'observacion' ? 'selected' : ''}>👁️ Observación</option><option value="decision" ${f.category === 'decision' ? 'selected' : ''}>🎯 Decisión</option><option value="reunion" ${f.category === 'reunion' ? 'selected' : ''}>🤝 Reunión</option><option value="otro" ${f.category === 'otro' ? 'selected' : ''}>📌 Otro</option></select></div>` : ''}
+        ${opts.isAdmin ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔑 ADMIN</label><select onchange="F['${sec}'].isAdmin=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="true" ${f.isAdmin === 'true' ? 'selected' : ''}>✅ Admins</option><option value="false" ${f.isAdmin === 'false' ? 'selected' : ''}> No Admins</option></select></div>` : ''}
       </div>
     </div>
   `;
@@ -457,12 +459,12 @@ function cF(s) { F[s] = { search: '', status: 'all', frequency: 'all', responsib
 
 function rTabs() {
   const tabs = [
-    { id: 'matrix', label: ' Matriz' },
+    { id: 'matrix', label: '📅 Matriz' },
     { id: 'val', label: '✅ Validaciones' },
     { id: 'log', label: '📝 Bitácora' },
     { id: 'team', label: '👥 Equipo' }
   ];
-  if (prof.is_admin) tabs.push({ id: 'admin', label: ' Admin' });
+  if (prof.is_admin) tabs.push({ id: 'admin', label: '🔧 Admin' });
   document.getElementById('tabs').innerHTML = tabs.map(t => `
     <button onclick="go('${t.id}')" class="px-4 py-2 text-sm font-semibold rounded-lg whitespace-nowrap ${tab === t.id ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}">${t.label}</button>
   `).join('');
@@ -476,7 +478,7 @@ function render() {
     if (v[tab]) v[tab](a);
   } catch (err) {
     console.error('Render error:', err);
-    a.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-xl p-6"><p class="text-red-700 font-semibold">Error al renderizar: ${err.message}</p><pre class="text-xs mt-2 text-red-600">${err.stack}</pre></div>`;
+    a.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-xl p-6"><p class="text-red-700 font-semibold">Error: ${err.message}</p></div>`;
   }
 }
 
@@ -484,24 +486,41 @@ function rM(a) {
   try {
     const today = new Date().toISOString().split('T')[0];
     const f = F.matrix;
+    
     const dates = [];
     const s = new Date(); s.setDate(s.getDate() - 6);
-    for (let i = 0; i < 7; i++) { const d = new Date(s); d.setDate(d.getDate() + i); dates.push(d.toISOString().split('T')[0]); }
+    for (let i = 0; i < 7; i++) { 
+      const d = new Date(s); 
+      d.setDate(d.getDate() + i); 
+      dates.push(d.toISOString().split('T')[0]); 
+    }
     
-    let list = [...tasks];
-    if (lvl() === 3) list = list.filter(t => t.assignee_id === me.id);
-    else if (lvl() === 2) list = list.filter(t => t.department_id === dept);
-    if (f.dept !== 'all') list = list.filter(t => t.department_id === f.dept);
-    if (f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
-    if (f.frequency !== 'all') list = list.filter(t => t.frequency === f.frequency);
-    if (f.status !== 'all') list = list.filter(t => t.status === f.status || (f.status === 'validated' && t.validation_status === 'validated'));
-    if (f.search) { const q = f.search.toLowerCase(); list = list.filter(t => t.title.toLowerCase().includes(q)); }
+    let list = tasks.filter(t => t && t.department_id && t.assignee_id);
+    const myLevel = lvl();
+    
+    if (myLevel === 3) list = list.filter(t => t.assignee_id === me.id);
+    else if (myLevel === 2) list = list.filter(t => t.department_id === dept);
+    
+    if (f.dept && f.dept !== 'all') list = list.filter(t => t.department_id === f.dept);
+    if (f.responsible && f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
+    if (f.frequency && f.frequency !== 'all') list = list.filter(t => t.frequency === f.frequency);
+    if (f.status && f.status !== 'all') list = list.filter(t => t.status === f.status || (f.status === 'validated' && t.validation_status === 'validated'));
+    if (f.search) { const q = f.search.toLowerCase(); list = list.filter(t => t.title && t.title.toLowerCase().includes(q)); }
     
     const byD = {};
     list.forEach(t => {
-      if (!byD[t.department_id]) byD[t.department_id] = {};
-      if (!byD[t.department_id][t.assignee_id]) byD[t.department_id][t.assignee_id] = { user: users.find(p => p.id === t.assignee_id), tasks: [] };
-      byD[t.department_id][t.assignee_id].tasks.push(t);
+      const deptId = t.department_id;
+      const userId = t.assignee_id;
+      if (!deptId || !userId) return;
+      if (!byD[deptId]) byD[deptId] = {};
+      if (!byD[deptId][userId]) {
+        const user = users.find(p => p.id === userId);
+        byD[deptId][userId] = { 
+          user: user || { full_name: 'Usuario desconocido', role: '', department_id: deptId }, 
+          tasks: [] 
+        };
+      }
+      byD[deptId][userId].tasks.push(t);
     });
     
     const tT = list.filter(t => t.due_date === today);
@@ -509,20 +528,41 @@ function rM(a) {
     const pV = tT.filter(t => t.status === 'completada' && (!t.validation_status || t.validation_status === 'pending'));
     const eff = tT.length > 0 ? Math.round((cT.length / tT.length) * 100) : 0;
     
-    const ulB = lvl() === 1 ? `<button onclick="openUl()" class="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-semibold hover:bg-amber-600">🔓 Desbloquear</button>` : '';
+    const ulB = myLevel === 1 ? `<button onclick="openUl()" class="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-semibold hover:bg-amber-600">🔓 Desbloquear</button>` : '';
     
     let h = `
       <div class="fade-in">
         <div class="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div><h2 class="text-2xl font-bold">📅 Matriz de Cumplimiento</h2><p class="text-slate-500">${DEPTS[dept].name} · ${list.length} tareas</p></div>
-          <div class="flex flex-wrap gap-2">${ulB}<button onclick="openT()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold">➕ Nueva Tarea</button></div>
+          <div>
+            <h2 class="text-2xl font-bold">📅 Matriz de Cumplimiento</h2>
+            <p class="text-slate-500">
+              ${DEPTS[dept]?.name || dept} · ${list.length} tareas
+              ${myLevel === 1 ? '<span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full ml-2">👑 Vista Global</span>' : ''}
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            ${ulB}
+            <button onclick="openT()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold">➕ Nueva Tarea</button>
+          </div>
         </div>
         ${rF('matrix')}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div class="bg-white rounded-xl p-4 border shadow-sm"><p class="text-xs text-slate-500 font-semibold">🎯 EFICIENCIA</p><p class="text-3xl font-bold text-indigo-600">${eff}%</p></div>
-          <div class="bg-white rounded-xl p-4 border shadow-sm"><p class="text-xs text-slate-500 font-semibold">✅ COMPLETADAS</p><p class="text-3xl font-bold text-emerald-600">${cT.length}/${tT.length}</p></div>
-          <div class="bg-white rounded-xl p-4 border shadow-sm"><p class="text-xs text-slate-500 font-semibold">⏳ PEND. VALIDACIÓN</p><p class="text-3xl font-bold text-orange-600">${pV.length}</p></div>
-          <div class="bg-white rounded-xl p-4 border shadow-sm"><p class="text-xs text-slate-500 font-semibold">📅 DÍAS</p><p class="text-3xl font-bold text-slate-600">7</p></div>
+          <div class="bg-white rounded-xl p-4 border shadow-sm">
+            <p class="text-xs text-slate-500 font-semibold">🎯 EFICIENCIA</p>
+            <p class="text-3xl font-bold text-indigo-600">${eff}%</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border shadow-sm">
+            <p class="text-xs text-slate-500 font-semibold">✅ COMPLETADAS</p>
+            <p class="text-3xl font-bold text-emerald-600">${cT.length}/${tT.length}</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border shadow-sm">
+            <p class="text-xs text-slate-500 font-semibold">⏳ PEND. VALIDACIÓN</p>
+            <p class="text-3xl font-bold text-orange-600">${pV.length}</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border shadow-sm">
+            <p class="text-xs text-slate-500 font-semibold"> DÍAS</p>
+            <p class="text-3xl font-bold text-slate-600">7</p>
+          </div>
         </div>
         <div class="bg-white rounded-xl p-4 mb-4 border">
           <p class="text-sm font-bold mb-2">📋 Leyenda:</p>
@@ -539,65 +579,128 @@ function rM(a) {
     `;
     
     if (Object.keys(byD).length === 0) {
-      h += `<div class="bg-white rounded-xl border p-12 text-center"><div class="text-6xl mb-4">📋</div><p class="text-slate-500 font-semibold">No hay tareas para mostrar</p><p class="text-sm text-slate-400 mt-2">Crea una nueva tarea para comenzar</p></div>`;
+      h += `
+        <div class="bg-white rounded-xl border p-12 text-center">
+          <div class="text-6xl mb-4">📋</div>
+          <p class="text-slate-500 font-semibold text-lg">No hay tareas para mostrar</p>
+          <p class="text-sm text-slate-400 mt-2">
+            ${myLevel === 1 
+              ? 'Como Gerencia, puedes ver todas las tareas. Usa el filtro "🏢 DEPTO" para seleccionar un departamento específico.' 
+              : 'Crea una nueva tarea para comenzar'}
+          </p>
+          ${myLevel === 1 ? `
+            <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg inline-block">
+              <p class="text-sm text-amber-900">
+                <strong>💡 Tip:</strong> Selecciona un departamento en los filtros de arriba para ver sus tareas.
+              </p>
+            </div>
+          ` : ''}
+        </div>`;
     } else {
       Object.keys(byD).forEach(did => {
-        h += `<div class="mb-6"><div class="bg-slate-800 text-white rounded-t-lg p-3 font-bold text-lg">${DEPTS[did]?.icon || ''} ${DEPTS[did]?.name || did}</div><div class="bg-white rounded-b-lg border overflow-hidden">`;
+        const deptInfo = DEPTS[did] || { name: did, icon: '📁' };
+        h += `<div class="mb-6">
+          <div class="bg-slate-800 text-white rounded-t-lg p-3 font-bold text-lg">
+            ${deptInfo.icon} ${deptInfo.name}
+          </div>
+          <div class="bg-white rounded-b-lg border overflow-hidden">`;
+        
         Object.values(byD[did]).forEach(({ user, tasks: ut }) => {
+          const userName = user?.full_name || 'Usuario desconocido';
+          const userRole = user?.role || '';
+          
           h += `<div class="bg-slate-100 p-2 font-semibold border-b flex items-center justify-between">
-            <span>${user?.full_name || '?'} - ${user?.role || ''}</span>
+            <span>${userName} - ${userRole}</span>
             <button onclick="openT()" class="text-xs px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">➕ Agregar</button>
           </div>`;
-          h += `<div class="overflow-x-auto"><table class="w-full text-xs"><thead class="bg-slate-50"><tr>
-            <th class="p-2 text-left border-b border-r w-8">N°</th>
-            <th class="p-2 text-left border-b border-r min-w-[200px]">TAREA</th>
-            <th class="p-2 text-left border-b border-r w-20">FREQ</th>
-            ${dates.map(d => `<th class="p-2 text-center border-b border-r w-20 ${d===today?'bg-blue-100 font-bold':''}">${fmt(d)}</th>`).join('')}
-            <th class="p-2 text-left border-b border-r w-16">ACC</th>
-          </tr></thead><tbody>`;
           
-          const titles = [...new Set(ut.map(t => t.title))];
+          h += `<div class="overflow-x-auto">
+            <table class="w-full text-xs">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th class="p-2 text-left border-b border-r w-8">N°</th>
+                  <th class="p-2 text-left border-b border-r min-w-[200px]">TAREA</th>
+                  <th class="p-2 text-left border-b border-r w-20">FREQ</th>
+                  ${dates.map(d => `<th class="p-2 text-center border-b border-r w-20 ${d===today?'bg-blue-100 font-bold':''}">${fmt(d)}</th>`).join('')}
+                  <th class="p-2 text-left border-b border-r w-16">ACC</th>
+                </tr>
+              </thead>
+              <tbody>`;
+          
+          const titles = [...new Set(ut.map(t => t.title).filter(Boolean))];
           titles.forEach((title, idx) => {
             const tpl = ut.find(t => t.title === title);
+            if (!tpl) return;
+            
             const sd = tpl.start_date || tpl.due_date || today;
+            const freq = fL(tpl.frequency);
+            
             h += `<tr class="border-b hover:bg-slate-50">
               <td class="p-2 border-r">${idx + 1}</td>
               <td class="p-2 border-r font-medium">${esc(title)}</td>
-              <td class="p-2 border-r">${fL(tpl.frequency)}</td>`;
+              <td class="p-2 border-r">${freq}</td>`;
             
             dates.forEach(d => {
               const td = ut.find(t => t.title === title && t.due_date === d);
               let st = 'pendiente', txt = 'Pendiente', cls = 'st-pend';
-              if (d < sd) { st = 'futura'; txt = '⏪'; cls = 'cell-fut'; }
-              else if (td) {
-                if (td.validation_status === 'validated') { st = 'validated'; txt = '✓'; cls = 'st-val'; }
-                else if (td.status === 'no_aplica') { st = 'no_aplica'; txt = 'N/A'; cls = 'st-na'; }
-                else if (td.status === 'completada') { st = 'completada'; txt = '✓'; cls = 'st-comp'; }
-                else if (td.status === 'proceso') { st = 'proceso'; txt = ''; cls = 'st-proc'; }
+              
+              if (d < sd) { 
+                st = 'futura'; txt = ''; cls = 'cell-fut'; 
+              } else if (td) {
+                if (td.validation_status === 'validated') { 
+                  st = 'validated'; txt = '✓'; cls = 'st-val'; 
+                } else if (td.status === 'no_aplica') { 
+                  st = 'no_aplica'; txt = 'N/A'; cls = 'st-na'; 
+                } else if (td.status === 'completada') { 
+                  st = 'completada'; txt = '✓'; cls = 'st-comp'; 
+                } else if (td.status === 'proceso') { 
+                  st = 'proceso'; txt = '⚙'; cls = 'st-proc'; 
+                }
               }
-              const can = d === today || (d < today && isUnl(d, user.department_id));
+              
+              const userDept = user?.department_id || did;
+              const can = d === today || (d < today && isUnl(d, userDept));
               const tid = td ? td.id : tpl.id;
               const mode = td ? 'edit' : 'create';
-              h += `<td class="p-1 text-center border-r ${can ? 'cell-ok' : 'cell-no'}" ${can ? `onclick="openM('${tid}','${d}','${mode}')"` : ''}>
+              
+              h += `<td class="p-1 text-center border-r ${can ? 'cell-ok' : 'cell-no'}" 
+                   ${can ? `onclick="openM('${tid}','${d}','${mode}')"` : ''}>
                 <span class="${cls} px-2 py-1 rounded text-[10px] font-semibold">${txt}</span>
               </td>`;
             });
-            h += `<td class="p-2 border-r"><button onclick="delT('${tpl.id}')" class="text-red-600 hover:text-red-800 text-xs">🗑️</button></td>`;
+            
+            h += `<td class="p-2 border-r">
+              <button onclick="delT('${tpl.id}')" class="text-red-600 hover:text-red-800 text-xs">🗑️</button>
+            </td>`;
             h += `</tr>`;
           });
+          
           h += `</tbody></table></div>`;
         });
         h += `</div></div>`;
       });
     }
+    
     a.innerHTML = h + `</div>`;
   } catch (err) {
     console.error('Matrix render error:', err);
-    a.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-xl p-6"><p class="text-red-700 font-semibold">Error en Matriz: ${err.message}</p></div>`;
+    a.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-xl p-6">
+      <p class="text-red-700 font-semibold">Error en Matriz: ${err.message}</p>
+      <pre class="text-xs mt-2 text-red-600">${err.stack}</pre>
+    </div>`;
   }
 }
 
-function fL(f) { return { diaria: '📅', semanal: '', quincenal: '📆', mensual: '📅', ocasional: '🔁', unica: '📌' }[f] || f; }
+function fL(f) { 
+  return { 
+    diaria: '📅', 
+    semanal: '📆', 
+    quincenal: '📆', 
+    mensual: '📅', 
+    ocasional: '🔁', 
+    unica: '📌' 
+  }[f] || f; 
+}
 
 function openUl() { updUlSt(); document.getElementById('ulModal').classList.remove('hidden'); }
 
@@ -609,11 +712,19 @@ function openM(tid, date, mode) {
   document.getElementById('mTask').textContent = t.title;
   document.getElementById('mInfo').textContent = `Frecuencia: ${t.frequency} · ${users.find(p=>p.id===t.assignee_id)?.full_name||'?'}`;
   const act = document.getElementById('mAct');
-  if (mode === 'create') { act.className = 'mb-3 text-xs font-semibold px-3 py-2 rounded-lg bg-blue-100 text-blue-700'; act.textContent = '📌 Se creará una nueva instancia para esta fecha'; }
-  else { act.className = 'mb-3 text-xs font-semibold px-3 py-2 rounded-lg bg-amber-100 text-amber-700'; act.textContent = '✏️ Se actualizará la tarea existente'; }
+  if (mode === 'create') { 
+    act.className = 'mb-3 text-xs font-semibold px-3 py-2 rounded-lg bg-blue-100 text-blue-700'; 
+    act.textContent = '📌 Se creará una nueva instancia para esta fecha'; 
+  } else { 
+    act.className = 'mb-3 text-xs font-semibold px-3 py-2 rounded-lg bg-amber-100 text-amber-700'; 
+    act.textContent = '✏️ Se actualizará la tarea existente'; 
+  }
   document.getElementById('mModal').classList.remove('hidden');
 }
-function closeM() { document.getElementById('mModal').classList.add('hidden'); mTask = null; mDate = null; mMode = null; }
+function closeM() { 
+  document.getElementById('mModal').classList.add('hidden'); 
+  mTask = null; mDate = null; mMode = null; 
+}
 
 async function setStatus(ns) {
   if (!mTask || !mDate) return;
@@ -621,9 +732,18 @@ async function setStatus(ns) {
     const ud = { status: ns };
     if (['completada','no_aplica'].includes(ns)) {
       ud.completed_at = new Date().toISOString(); ud.completed_by = me.id;
-      if (lvl() === 1) { ud.validation_status = 'validated'; ud.validated_at = new Date().toISOString(); ud.validated_by = me.id; }
-      else { ud.validation_status = 'pending'; }
-    } else if (ns === 'pendiente' || ns === 'proceso') { ud.validation_status = null; ud.validated_at = null; ud.validated_by = null; }
+      if (lvl() === 1) { 
+        ud.validation_status = 'validated'; 
+        ud.validated_at = new Date().toISOString(); 
+        ud.validated_by = me.id; 
+      } else { 
+        ud.validation_status = 'pending'; 
+      }
+    } else if (ns === 'pendiente' || ns === 'proceso') { 
+      ud.validation_status = null; 
+      ud.validated_at = null; 
+      ud.validated_by = null; 
+    }
     
     if (mMode === 'create') {
       ud.due_date = mDate;
@@ -634,18 +754,26 @@ async function setStatus(ns) {
       const { error } = await SB.from('tasks').update(ud).eq('id', mTask.id);
       if (error) throw error;
     }
-    closeM(); await load(); render(); toast('✅ Actualizado');
-  } catch (err) { toast('❌ ' + err.message); }
+    closeM(); 
+    await load(); 
+    render(); 
+    toast('✅ Actualizado');
+  } catch (err) { 
+    toast('❌ ' + err.message); 
+  }
 }
 
 function rV(a) {
-  if (!canV()) { a.innerHTML = `<div class="text-center py-16"><div class="text-6xl mb-4">🔒</div><h2 class="text-2xl font-bold">Acceso Restringido</h2><p>Solo Jefes y Gerencia</p></div>`; return; }
+  if (!canV()) { 
+    a.innerHTML = `<div class="text-center py-16"><div class="text-6xl mb-4">🔒</div><h2 class="text-2xl font-bold">Acceso Restringido</h2><p>Solo Jefes y Gerencia</p></div>`; 
+    return; 
+  }
   const lv = lvl(), f = F.val;
-  let list = tasks.filter(t => t.status === 'completada' && t.assignee_id !== me.id && (!t.validation_status || t.validation_status === 'pending'));
+  let list = tasks.filter(t => t && t.status === 'completada' && t.assignee_id !== me.id && (!t.validation_status || t.validation_status === 'pending'));
   if (lv === 2) { const tm = users.filter(p => p.department_id === dept && lvl(p) === 3).map(p => p.id); list = list.filter(t => tm.includes(t.assignee_id)); }
   else if (lv === 1) { const al = users.filter(p => lvl(p) === 2 || lvl(p) === 3).map(p => p.id); list = list.filter(t => al.includes(t.assignee_id)); }
-  if (f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
-  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(t => t.title.toLowerCase().includes(q)); }
+  if (f.responsible && f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
+  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(t => t.title && t.title.toLowerCase().includes(q)); }
   
   a.innerHTML = `
     <div class="fade-in max-w-5xl mx-auto">
@@ -653,10 +781,10 @@ function rV(a) {
       ${rF('val', { dept: false, status: false, frequency: false })}
       ${list.length === 0 ? '<div class="bg-white rounded-xl p-12 text-center border"><p class="text-slate-500">🎉 Sin pendientes</p></div>' :
       `<div class="space-y-3">${list.map(t => {
-        const u = users.find(p=>p.id===t.assignee_id), ul = lvl(u);
+        const u = users.find(p=>p.id===t.assignee_id), ul = u ? lvl(u) : 3;
         const b = ul === 1 ? '<span class="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs">Gerencia</span>' : ul === 2 ? '<span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">Jefe</span>' : '<span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">Equipo</span>';
         return `<div class="bg-white rounded-xl border p-4 flex justify-between items-center">
-          <div><h3 class="font-bold">${esc(t.title)}</h3><p class="text-sm text-slate-600 mt-1"> ${u?.full_name||'?'} · ${b} · 📅 ${t.completed_at?fmt(t.completed_at):'Sin fecha'}</p><p class="text-xs text-slate-500 mt-1">🏢 ${DEPTS[u?.department_id]?.name || ''}</p></div>
+          <div><h3 class="font-bold">${esc(t.title)}</h3><p class="text-sm text-slate-600 mt-1">👤 ${u?.full_name||'?'} · ${b} ·  ${t.completed_at?fmt(t.completed_at):'Sin fecha'}</p><p class="text-xs text-slate-500 mt-1">🏢 ${DEPTS[u?.department_id]?.name || ''}</p></div>
           <button onclick="openV('${t.id}')" class="px-4 py-2 bg-indigo-500 text-white rounded-lg">Validar</button>
         </div>`;
       }).join('')}</div>`}
@@ -675,24 +803,24 @@ async function doVal() {
 async function doRej() {
   if (!vTask) return;
   await SB.from('tasks').update({ validation_status:'rejected', validation_observations:'Rechazado: '+document.getElementById('vObs').value, status:'pendiente' }).eq('id', vTask.id);
-  closeV(); await load(); render(); toast(' Rechazada');
+  closeV(); await load(); render(); toast('🔄 Rechazada');
 }
 
 function rL(a) {
   const entries = logs.filter(e => e.user_id === me.id), f = F.log;
   let list = entries;
-  if (f.category !== 'all') list = list.filter(e => e.category === f.category);
-  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(e => e.content.toLowerCase().includes(q)); }
+  if (f.category && f.category !== 'all') list = list.filter(e => e.category === f.category);
+  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(e => e.content && e.content.toLowerCase().includes(q)); }
   a.innerHTML = `
     <div class="fade-in max-w-5xl mx-auto">
       <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold">📝 Mi Bitácora Personal</h2><p class="text-slate-500">Privada - solo tú la ves</p></div><button onclick="document.getElementById('logModal').classList.remove('hidden')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Nueva</button></div>
       ${rF('log', { dept: false, status: false, frequency: false, responsible: false, category: true })}
       <div class="space-y-3">
-        ${list.length === 0 ? `<div class="bg-white rounded-xl p-12 text-center border"><div class="text-6xl mb-4">📝</div><p class="text-slate-500 font-semibold">Vacía</p></div>` : list.map(e => `
+        ${list.length === 0 ? `<div class="bg-white rounded-xl p-12 text-center border"><div class="text-6xl mb-4"></div><p class="text-slate-500 font-semibold">Vacía</p></div>` : list.map(e => `
           <div class="bg-white rounded-xl border p-4 hover:shadow-md transition-shadow">
             <div class="flex justify-between items-start mb-3">
               <div class="flex items-center gap-2"><span class="text-xs px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-semibold">${e.category}</span><span class="text-xs text-slate-400">📅 ${fmt(e.entry_date)}</span></div>
-              <button onclick="delL('${e.id}')" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-sm">️</button>
+              <button onclick="delL('${e.id}')" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-sm">🗑️</button>
             </div>
             <p class="text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">${esc(e.content)}</p>
           </div>
@@ -708,16 +836,16 @@ document.getElementById('logForm').addEventListener('submit', async (e) => {
   document.getElementById('logModal').classList.add('hidden'); document.getElementById('logForm').reset();
   await load(); render(); toast('✅ Guardada');
 });
-async function delL(id) { if (!confirm('¿Eliminar?')) return; await SB.from('logbook').delete().eq('id', id); await load(); render(); toast('️ Eliminada'); }
+async function delL(id) { if (!confirm('¿Eliminar?')) return; await SB.from('logbook').delete().eq('id', id); await load(); render(); toast('🗑️ Eliminada'); }
 
 function rT(a) {
   const f = F.team;
   let list = users.filter(u => u.department_id === dept);
-  if (f.roleLevel !== 'all') list = list.filter(u => u.role_level == f.roleLevel);
-  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(u => u.full_name.toLowerCase().includes(q)); }
+  if (f.roleLevel && f.roleLevel !== 'all') list = list.filter(u => u.role_level == f.roleLevel);
+  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(u => u.full_name && u.full_name.toLowerCase().includes(q)); }
   a.innerHTML = `
     <div class="fade-in max-w-4xl mx-auto">
-      <h2 class="text-2xl font-bold mb-6">👥 Equipo de ${DEPTS[dept].name}</h2>
+      <h2 class="text-2xl font-bold mb-6">👥 Equipo de ${DEPTS[dept]?.name || dept}</h2>
       ${rF('team', { dept: false, status: false, frequency: false, responsible: false, roleLevel: true })}
       <div class="space-y-3">
         ${list.map(u => {
@@ -735,20 +863,20 @@ function rA(a) {
   if (!prof.is_admin) { a.innerHTML = '<p class="text-center py-12">Acceso restringido</p>'; return; }
   const f = F.admin;
   let list = [...users];
-  if (f.dept !== 'all') list = list.filter(p => p.department_id === f.dept);
-  if (f.roleLevel !== 'all') list = list.filter(p => p.role_level == f.roleLevel);
-  if (f.isAdmin !== 'all') list = list.filter(p => String(p.is_admin) === f.isAdmin);
-  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(p => p.full_name.toLowerCase().includes(q) || p.email.toLowerCase().includes(q)); }
+  if (f.dept && f.dept !== 'all') list = list.filter(p => p.department_id === f.dept);
+  if (f.roleLevel && f.roleLevel !== 'all') list = list.filter(p => p.role_level == f.roleLevel);
+  if (f.isAdmin && f.isAdmin !== 'all') list = list.filter(p => String(p.is_admin) === f.isAdmin);
+  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(p => (p.full_name && p.full_name.toLowerCase().includes(q)) || (p.email && p.email.toLowerCase().includes(q))); }
   a.innerHTML = `
     <div class="fade-in">
-      <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold"> Administración</h2><p class="text-gray-500">(${list.length} de ${users.length})</p></div><button onclick="openU()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Crear Usuario</button></div>
+      <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold">🔧 Administración</h2><p class="text-gray-500">(${list.length} de ${users.length})</p></div><button onclick="openU()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Crear Usuario</button></div>
       ${rF('admin', { status: false, frequency: false, responsible: false, roleLevel: true, isAdmin: true })}
       <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
         <table class="w-full">
           <thead class="bg-gray-50 border-b"><tr><th class="text-left p-3">Nombre</th><th class="text-left p-3">Email</th><th class="text-left p-3">Depto</th><th class="text-left p-3">Cargo</th><th class="text-left p-3">Nivel</th><th class="text-left p-3">Acciones</th></tr></thead>
           <tbody class="divide-y">
             ${list.map(p => {
-              const b = p.role_level === 1 ? '<span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs"> Gerencia</span>' : p.role_level === 2 ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">👔 Jefe</span>' : '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">👤 Equipo</span>';
+              const b = p.role_level === 1 ? '<span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">🏢 Gerencia</span>' : p.role_level === 2 ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">👔 Jefe</span>' : '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">👤 Equipo</span>';
               return `<tr class="hover:bg-gray-50"><td class="p-3 font-semibold">${p.full_name}</td><td class="p-3 text-sm text-gray-600">${p.email}</td><td class="p-3 text-sm">${DEPTS[p.department_id]?.icon || ''} ${DEPTS[p.department_id]?.name || p.department_id}</td><td class="p-3 text-sm">${p.role || '-'}</td><td class="p-3">${b} ${p.is_admin ? '<span class="ml-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Admin</span>' : ''}</td><td class="p-3"><div class="flex gap-2"><button onclick="editU('${p.id}')" class="text-indigo-600 hover:underline text-sm">✏️ Editar</button>${p.id !== me.id ? `<button onclick="delU('${p.id}')" class="text-red-600 hover:underline text-sm">🗑️</button>` : '<span class="text-gray-400 text-sm">(Tú)</span>'}</div></td></tr>`;
             }).join('')}
           </tbody>
@@ -809,3 +937,4 @@ document.addEventListener('click', (e) => {
 </script>
 </body>
 </html>
+
