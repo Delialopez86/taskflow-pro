@@ -727,7 +727,7 @@ function closeM() {
 }
 
 async function setStatus(ns) {
-  console.log('🔄 setStatus llamado con:', { ns, mTask, mDate, mMode });
+  console.log('🔄 setStatus llamado con:', { ns, mTaskId: mTask?.id, mDate, mMode });
   
   if (!mTask || !mDate) {
     console.error('❌ Faltan datos:', { mTask, mDate });
@@ -754,6 +754,8 @@ async function setStatus(ns) {
       ud.validated_by = null;
     }
     
+    console.log(' Datos a enviar:', ud);
+    
     let result;
     
     if (mMode === 'create') {
@@ -766,42 +768,48 @@ async function setStatus(ns) {
       ud.created_by = me.id;
       ud.title = mTask.title;
       
-      console.log('📝 INSERTANDO nueva tarea:', ud);
+      console.log('📝 INSERTANDO nueva tarea...');
       result = await SB.from('tasks').insert(ud);
-    } else {
-      console.log('️ ACTUALIZANDO tarea:', { id: mTask.id, update: ud });
-      result = await SB.from('tasks').update(ud).eq('id', mTask.id);
-    }
-    
-    console.log('📤 Resultado:', result);
-    
-    if (result.error) {
-      console.error('❌ Error de Supabase:', result.error);
-      toast('❌ Error: ' + result.error.message);
-      return;
-    }
-    
-    console.log('✅ Éxito, recargando datos...');
-    
-    // Forzar recarga completa
-    closeM();
-    await load();
-    render();
-    toast('✅ Estado actualizado');
-    
-    // Verificación: buscar la tarea en los datos recargados
-    setTimeout(() => {
-      if (mMode === 'create') {
-        const nueva = tasks.find(t => t.due_date === mDate && t.title === mTask.title);
-        console.log('🔍 Verificación - Nueva tarea encontrada:', nueva);
-      } else {
-        const actualizada = tasks.find(t => t.id === mTask.id);
-        console.log('🔍 Verificación - Tarea actualizada:', actualizada);
+      console.log('📤 Resultado INSERT:', result);
+      
+      if (result.error) {
+        console.error('❌ Error INSERT:', result.error);
+        toast('❌ Error al crear: ' + result.error.message);
+        return;
       }
-    }, 500);
+      
+      console.log('✅ Insertado correctamente');
+      
+    } else {
+      console.log('✏️ ACTUALIZANDO tarea ID:', mTask.id);
+      result = await SB.from('tasks').update(ud).eq('id', mTask.id);
+      console.log('📤 Resultado UPDATE:', result);
+      
+      if (result.error) {
+        console.error(' Error UPDATE:', result.error);
+        toast(' Error al actualizar: ' + result.error.message);
+        return;
+      }
+      
+      console.log('✅ Actualizado correctamente');
+    }
+    
+    console.log('🔄 Cerrando modal y recargando...');
+    closeM();
+    
+    console.log('📥 Llamando a load()...');
+    await load();
+    console.log('📊 Tareas recargadas:', tasks.length);
+    
+    console.log('🎨 Llamando a render()...');
+    render();
+    
+    toast('✅ Estado actualizado');
+    console.log('✅ Proceso completado');
     
   } catch (err) {
-    console.error('❌ Error completo:', err);
+    console.error('❌ ERROR COMPLETO:', err);
+    console.error('Stack:', err.stack);
     toast('❌ Error: ' + err.message);
   }
 }
