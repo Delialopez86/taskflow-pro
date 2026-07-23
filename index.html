@@ -729,37 +729,48 @@ function closeM() {
 async function setStatus(ns) {
   if (!mTask || !mDate) return;
   try {
+    // 1. Preparar los datos de actualización
     const ud = { status: ns };
+    
+    // 2. Manejar casos especiales
     if (['completada','no_aplica'].includes(ns)) {
-      ud.completed_at = new Date().toISOString(); ud.completed_by = me.id;
-      if (lvl() === 1) { 
-        ud.validation_status = 'validated'; 
-        ud.validated_at = new Date().toISOString(); 
-        ud.validated_by = me.id; 
-      } else { 
-        ud.validation_status = 'pending'; 
+      ud.completed_at = new Date().toISOString();
+      ud.completed_by = me.id;
+      if (lvl() === 1) {
+        ud.validation_status = 'validated';
+        ud.validated_at = new Date().toISOString();
+        ud.validated_by = me.id;
+      } else {
+        ud.validation_status = 'pending';
       }
-    } else if (ns === 'pendiente' || ns === 'proceso') { 
-      ud.validation_status = null; 
-      ud.validated_at = null; 
-      ud.validated_by = null; 
+    } else if (ns === 'pendiente' || ns === 'proceso') {
+      ud.validation_status = null;
+      ud.validated_at = null;
+      ud.validated_by = null;
     }
     
+    // 3. Determinar si es creación o actualización
     if (mMode === 'create') {
       ud.due_date = mDate;
       ud.title = mTask.title + ' (' + fmt(mDate) + ')';
+      console.log('Creando nueva instancia:', ud);
       const { error } = await SB.from('tasks').insert(ud);
       if (error) throw error;
     } else {
+      console.log('Actualizando tarea:', { id: mTask.id, update: ud });
       const { error } = await SB.from('tasks').update(ud).eq('id', mTask.id);
       if (error) throw error;
     }
-    closeM(); 
-    await load(); 
-    render(); 
-    toast('✅ Actualizado');
-  } catch (err) { 
-    toast('❌ ' + err.message); 
+    
+    // 4. Cerrar modal y refrescar
+    closeM();
+    await load();  // Recargar datos completos
+    render();      // Volver a dibujar la matriz
+    toast('✅ Estado actualizado correctamente');
+    
+  } catch (err) {
+    console.error('Error al actualizar estado:', err);
+    toast('❌ Error al actualizar: ' + err.message);
   }
 }
 
