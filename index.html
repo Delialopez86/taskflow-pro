@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskFlow Pro</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+<style>
+  * { font-family: 'Inter', sans-serif; }
+  .fade-in { animation: fadeIn 0.3s ease-in; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .slide-in { animation: slideIn 0.3s ease-out; }
+  @keyframes slideIn { from { transform: translateY(-20px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+  .pulse { animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.2);} }
+  .st-pend { background: #ef4444; color: white; }
+  .st-proc { background: #eab308; color: white; }
+  .st-comp { background: #10b981; color: white; }
+  .st-val { background: #059669; color: white; }
+  .st-na { background: #6b7280; color: white; }
+  .cell-ok { cursor: pointer; transition: all 0.15s; }
+  .cell-ok:hover { transform: scale(1.1); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  .cell-no { background: #f1f5f9; opacity: 0.6; cursor: not-allowed; }
+  .cell-fut { background: #e2e8f0; color: #64748b; }
+</style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+<script>
+const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrdHl0bG93dmVkZm9sdnN5cG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2NTE3NDgsImV4cCI6MjA5OTIyNzc0OH0.TjzdlE5uevbkQtvBPsXQh5_k7qOaZxTSl98dHHVyy7Y');
+</script>
+
+<div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-indigo-600 to-purple-700">
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md fade-in">
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mb-4 text-white text-3xl">📋</div>
+      <h1 class="text-3xl font-bold text-slate-800">TaskFlow Pro</h1>
+      <p class="text-slate-500 mt-2">Matriz de Cumplimiento</p>
+    </div>
+    <form id="loginForm" class="space-y-4">
+      <input type="email" id="lEmail" placeholder="Correo electrónico" required class="w-full px-4 py-3 border border-slate-200 rounded-xl">
+      <input type="password" id="lPass" placeholder="Contraseña" required class="w-full px-4 py-3 border border-slate-200 rounded-xl">
+      <button type="submit" id="lBtn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold">Iniciar Sesión</button>
+      <div id="lErr" class="hidden bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700"></div>
+    </form>
+  </div>
+</div>
+
+<div id="deptModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-2xl p-6 max-w-2xl w-full slide-in">
+    <h2 class="text-2xl font-bold mb-2">📋 Selecciona un Departamento</h2>
+    <p class="text-slate-500 mb-6">Elige el departamento que deseas visualizar</p>
+    <div id="deptList" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+    <button onclick="closeDept()" class="mt-4 w-full py-2 bg-gray-200 rounded-lg font-semibold">Cancelar y cerrar sesión</button>
+  </div>
+</div>
+
+<div id="mainApp" class="hidden">
+  <header class="bg-white shadow-sm border-b sticky top-0 z-40">
+    <div class="max-w-[1600px] mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-xl">📋</div>
+        <div>
+          <h1 class="font-bold text-gray-800">TaskFlow Pro</h1>
+          <p id="dLabel" class="text-xs text-gray-500"></p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="toggleP('notifPanel')" class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <span class="text-xl">🔔</span>
+          <span id="nBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center pulse">0</span>
+        </button>
+        <button onclick="toggleP('chatPanel')" class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <span class="text-xl">💬</span>
+          <span id="cBadge" class="hidden absolute -top-1 -right-1 bg-blue-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center pulse">0</span>
+        </button>
+        <button onclick="openDept()" class="px-3 py-1.5 text-xs bg-indigo-100 text-indigo-700 rounded-lg font-semibold hover:bg-indigo-200">🔄 Cambiar Depto</button>
+        <div class="text-right hidden sm:block">
+          <p id="uName" class="text-sm font-semibold"></p>
+          <p id="cDate" class="text-xs text-gray-500"></p>
+        </div>
+        <button onclick="doLogout()" class="p-2 hover:bg-gray-100 rounded-lg">
+          <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+  <nav class="bg-white border-b sticky top-[65px] z-30">
+    <div class="max-w-[1600px] mx-auto px-2">
+      <div id="tabs" class="flex gap-1 overflow-x-auto py-2"></div>
+    </div>
+  </nav>
+  <main class="max-w-[1600px] mx-auto px-4 py-6"><div id="content"></div></main>
+</div>
+
+<div id="taskModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto slide-in">
+    <h2 class="text-2xl font-bold mb-4" id="tTitle">Nueva Tarea</h2>
+    <form id="taskForm" class="space-y-3">
+      <input type="hidden" id="tId">
+      <div><label class="block text-sm font-semibold mb-1">Título *</label><input type="text" id="tName" required class="w-full px-3 py-2 border rounded-lg"></div>
+      <div><label class="block text-sm font-semibold mb-1">Descripción</label><textarea id="tDesc" rows="2" class="w-full px-3 py-2 border rounded-lg"></textarea></div>
+      <div><label class="block text-sm font-semibold mb-1">Asignar a *</label><select id="tUser" required class="w-full px-3 py-2 border rounded-lg"></select></div>
+      <div><label class="block text-sm font-semibold mb-1">Departamento *</label>
+        <select id="tDept" required class="w-full px-3 py-2 border rounded-lg">
+          <option value="">Seleccionar...</option>
+          <option value="tesoreria">💰 Tesorería</option>
+          <option value="ctasctes"> Cuentas Corrientes</option>
+          <option value="contabilidad">📊 Contabilidad</option>
+          <option value="rrhh">👥 RRHH</option>
+          <option value="gerencia">🏢 Gerencia</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="block text-sm font-semibold mb-1">📅 Fecha inicio *</label><input type="date" id="tStart" required class="w-full px-3 py-2 border rounded-lg"></div>
+        <div><label class="block text-sm font-semibold mb-1">📅 Fecha límite</label><input type="date" id="tDue" class="w-full px-3 py-2 border rounded-lg"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="block text-sm font-semibold mb-1">Frecuencia *</label>
+          <select id="tFreq" required class="w-full px-3 py-2 border rounded-lg">
+            <option value="diaria">📅 Diaria</option>
+            <option value="semanal">📆 Semanal</option>
+            <option value="quincenal">📆 Quincenal</option>
+            <option value="mensual">📅 Mensual</option>
+            <option value="ocasional">🔁 Ocasional</option>
+            <option value="unica"> Única vez</option>
+          </select>
+        </div>
+        <div><label class="block text-sm font-semibold mb-1">Prioridad</label>
+          <select id="tPri" class="w-full px-3 py-2 border rounded-lg">
+            <option value="baja">🟢 Baja</option>
+            <option value="media" selected>🟡 Media</option>
+            <option value="alta">🔴 Alta</option>
+            <option value="urgente">🚨 Urgente</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="closeTask()" class="flex-1 py-2 border rounded-lg font-semibold">Cancelar</button>
+        <button type="submit" class="flex-1 py-2 bg-indigo-600 text-white rounded-lg font-semibold">💾 Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="mModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-2xl p-6 max-w-md w-full slide-in">
+    <h3 class="text-xl font-bold mb-2">Cambiar estado - <span id="mDate"></span></h3>
+    <p id="mTask" class="text-sm text-slate-600 mb-1"></p>
+    <p id="mInfo" class="text-xs text-slate-500 mb-3"></p>
+    <div id="mAct" class="mb-3 text-xs font-semibold px-3 py-2 rounded-lg"></div>
+    <div class="space-y-2">
+      <button onclick="setStatus('pendiente')" class="w-full px-4 py-3 bg-red-500 text-white rounded-lg font-semibold">⏳ Pendiente</button>
+      <button onclick="setStatus('proceso')" class="w-full px-4 py-3 bg-yellow-500 text-white rounded-lg font-semibold"> En proceso</button>
+      <button onclick="setStatus('completada')" class="w-full px-4 py-3 bg-emerald-500 text-white rounded-lg font-semibold">✅ Realizado</button>
+      <button onclick="setStatus('no_aplica')" class="w-full px-4 py-3 bg-slate-500 text-white rounded-lg font-semibold">➖ No Aplica</button>
+      <button onclick="closeM()" class="w-full px-4 py-3 bg-slate-200 text-slate-700 rounded-lg font-semibold">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="vModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-2xl p-6 max-w-lg w-full">
+    <h3 class="text-xl font-bold mb-4">✅ Validar Tarea</h3>
+    <p id="vTask" class="text-slate-600 mb-2 font-semibold"></p>
+    <p id="vUser" class="text-sm text-slate-500 mb-4"></p>
+    <textarea id="vObs" placeholder="Observaciones..." class="w-full px-4 py-2 border rounded-xl mb-4" rows="3"></textarea>
+    <div class="flex gap-3">
+      <button onclick="doVal()" class="flex-1 bg-emerald-500 text-white py-2 rounded-xl font-semibold">✅ Aprobar</button>
+      <button onclick="doRej()" class="flex-1 bg-red-500 text-white py-2 rounded-xl font-semibold">❌ Rechazar</button>
+      <button onclick="closeV()" class="flex-1 bg-slate-200 py-2 rounded-xl font-semibold">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="uModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-2xl p-6 max-w-lg w-full slide-in">
+    <h3 class="text-xl font-bold mb-4" id="uTitle">Crear Usuario</h3>
+    <form id="uForm" class="space-y-3">
+      <input type="hidden" id="uId">
+      <div><label class="block text-sm font-semibold mb-1">Correo *</label><input type="email" id="uEmail" required class="w-full px-3 py-2 border rounded-lg"></div>
+      <div id="uPF"><label class="block text-sm font-semibold mb-1">Contraseña * (mín. 6)</label><input type="password" id="uPass" minlength="6" class="w-full px-3 py-2 border rounded-lg"></div>
+      <div><label class="block text-sm font-semibold mb-1">Nombre *</label><input type="text" id="uName2" required class="w-full px-3 py-2 border rounded-lg"></div>
+      <div><label class="block text-sm font-semibold mb-1">Departamento *</label>
+        <select id="uDept" required class="w-full px-3 py-2 border rounded-lg">
+          <option value="">Seleccionar...</option>
+          <option value="tesoreria">💰 Tesorería</option>
+          <option value="ctasctes">📋 Cuentas Corrientes</option>
+          <option value="contabilidad">📊 Contabilidad</option>
+          <option value="rrhh"> RRHH</option>
+          <option value="gerencia">🏢 Gerencia</option>
+        </select>
+      </div>
+      <div><label class="block text-sm font-semibold mb-1">Cargo</label><input type="text" id="uRole" class="w-full px-3 py-2 border rounded-lg"></div>
+      <div><label class="block text-sm font-semibold mb-1">Nivel *</label>
+        <select id="uLvl" required class="w-full px-3 py-2 border rounded-lg">
+          <option value="3">👤 Equipo (Nivel 3)</option>
+          <option value="2"> Jefe (Nivel 2)</option>
+          <option value="1">🏢 Gerencia (Nivel 1)</option>
+        </select>
+      </div>
+      <label class="flex items-center gap-2 p-3 bg-slate-50 rounded-lg">
+        <input type="checkbox" id="uAdm" class="w-4 h-4">
+        <span class="text-sm font-semibold">Es administrador</span>
+      </label>
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="document.getElementById('uModal').classList.add('hidden')" class="flex-1 py-2 border rounded-lg font-semibold">Cancelar</button>
+        <button type="submit" class="flex-1 py-2 bg-indigo-600 text-white rounded-lg font-semibold" id="uBtn">Crear</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="logModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-2xl p-6 max-w-lg w-full slide-in">
+    <h3 class="text-xl font-bold mb-4">📝 Nueva Entrada</h3>
+    <form id="logForm" class="space-y-3">
+      <div><label class="block text-sm font-semibold mb-1">📅 Fecha</label><input type="date" id="logD" required class="w-full px-3 py-2 border rounded-lg"></div>
+      <div><label class="block text-sm font-semibold mb-1">📂 Categoría</label>
+        <select id="logC" class="w-full px-3 py-2 border rounded-lg">
+          <option value="general">📋 General</option>
+          <option value="incidencia">️ Incidencia</option>
+          <option value="observacion">👁️ Observación</option>
+          <option value="decision"> Decisión</option>
+          <option value="reunion">🤝 Reunión</option>
+          <option value="otro">📌 Otro</option>
+        </select>
+      </div>
+      <div><label class="block text-sm font-semibold mb-1">📝 Contenido *</label><textarea id="logT" required rows="4" class="w-full px-3 py-2 border rounded-lg"></textarea></div>
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="document.getElementById('logModal').classList.add('hidden')" class="flex-1 py-2 border rounded-lg font-semibold">Cancelar</button>
+        <button type="submit" class="flex-1 py-2 bg-indigo-600 text-white rounded-lg font-semibold">💾 Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="ulModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-2xl p-6 max-w-lg w-full slide-in">
+    <h3 class="text-xl font-bold mb-4"> Desbloquear Fechas</h3>
+    <p class="text-sm text-slate-500 mb-4">Permite editar estados en días pasados</p>
+    <div class="space-y-4">
+      <div><label class="block text-sm font-semibold mb-1">📅 Desde</label><input type="date" id="ulS" class="w-full px-3 py-2 border rounded-lg"></div>
+      <div><label class="block text-sm font-semibold mb-1"> Hasta</label><input type="date" id="ulE" class="w-full px-3 py-2 border rounded-lg"></div>
+      <div>
+        <label class="block text-sm font-semibold mb-2">👥 Aplicar a:</label>
+        <div class="space-y-2">
+          <label class="flex items-center gap-2"><input type="radio" name="ulSc" value="gerencia" checked class="w-4 h-4"><span>Solo Gerencia</span></label>
+          <label class="flex items-center gap-2"><input type="radio" name="ulSc" value="department" class="w-4 h-4"><span>Departamento actual</span></label>
+          <label class="flex items-center gap-2"><input type="radio" name="ulSc" value="all" class="w-4 h-4"><span>Todos los departamentos</span></label>
+        </div>
+      </div>
+      <div id="ulSt" class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-900"><strong>ℹ️</strong> Fechas bloqueadas por defecto.</div>
+    </div>
+    <div class="flex gap-3 mt-6">
+      <button onclick="doUnlock()" class="flex-1 bg-emerald-500 text-white py-2 rounded-lg font-semibold">🔓 Desbloquear</button>
+      <button onclick="doReset()" class="flex-1 bg-slate-200 py-2 rounded-lg font-semibold">🔄 Restablecer</button>
+      <button onclick="document.getElementById('ulModal').classList.add('hidden')" class="flex-1 bg-slate-100 py-2 rounded-lg font-semibold">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="notifPanel" class="hidden fixed top-20 right-4 w-80 bg-white rounded-2xl shadow-2xl z-50 border max-h-96 overflow-y-auto slide-in">
+  <div class="p-4 border-b flex items-center justify-between sticky top-0 bg-white">
+    <h3 class="font-bold">🔔 Notificaciones</h3>
+    <button onclick="markAll()" class="text-xs text-indigo-600 font-semibold">Marcar leídas</button>
+  </div>
+  <div id="notifList" class="p-2"></div>
+</div>
+
+<div id="chatPanel" class="hidden fixed top-20 right-4 w-96 bg-white rounded-2xl shadow-2xl z-50 border h-[500px] flex flex-col slide-in">
+  <div class="p-4 border-b flex items-center justify-between">
+    <h3 class="font-bold">💬 Chat</h3>
+    <button onclick="document.getElementById('chatPanel').classList.add('hidden')" class="p-2 hover:bg-gray-100 rounded-lg"></button>
+  </div>
+  <div id="chatU" class="border-b p-2 max-h-32 overflow-y-auto"></div>
+  <div id="chatM" class="flex-1 p-4 overflow-y-auto bg-slate-50"></div>
+  <div class="p-3 border-t">
+    <div class="flex gap-2">
+      <input type="text" id="chatI" placeholder="Escribe..." class="flex-1 px-3 py-2 text-sm border rounded-lg">
+      <button onclick="sendChat()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="hidden fixed bottom-6 right-6 px-6 py-3 rounded-xl shadow-lg text-white font-semibold z-50"></div>
+
+<script>
+const DEPTS = {
+  tesoreria: { name: 'Tesorería', icon: '💰' },
+  ctasctes: { name: 'Cuentas Corrientes', icon: '📋' },
+  contabilidad: { name: 'Contabilidad', icon: '📊' },
+  rrhh: { name: 'RRHH', icon: '👥' },
+  gerencia: { name: 'Gerencia', icon: '🏢' }
+};
+
+let me = null, prof = null, dept = null, tab = 'matrix';
+let tasks = [], users = [], notifs = [], msgs = [], logs = [];
+let chatWith = null;
+let mTask = null, mDate = null, mMode = null;
+let vTask = null;
+
+let F = {
+  matrix: { search: '', status: 'all', frequency: 'all', responsible: 'all', dept: 'all' },
+  val: { search: '', responsible: 'all' },
+  log: { search: '', category: 'all' },
+  team: { search: '', roleLevel: 'all' },
+  admin: { search: '', dept: 'all', roleLevel: 'all', isAdmin: 'all' }
+};
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('lBtn');
+  btn.disabled = true; btn.textContent = 'Iniciando...';
+  document.getElementById('lErr').classList.add('hidden');
+  try {
+    const { data, error } = await SB.auth.signInWithPassword({
+      email: document.getElementById('lEmail').value,
+      password: document.getElementById('lPass').value
+    });
+    if (error) throw error;
+    me = data.user;
+    const { data: p } = await SB.from('profiles').select('*').eq('id', me.id).single();
+    if (!p) throw new Error('Sin perfil');
+    prof = p; dept = p.department_id;
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('mainApp').classList.remove('hidden');
+    document.getElementById('uName').textContent = p.full_name + ' (Nivel ' + lvl() + ')';
+    document.getElementById('cDate').textContent = new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' });
+    await load();
+    openDept();
+    startPoll();
+  } catch (err) {
+    document.getElementById('lErr').textContent = '❌ ' + err.message;
+    document.getElementById('lErr').classList.remove('hidden');
+  } finally { btn.disabled = false; btn.textContent = 'Iniciar Sesión'; }
+});
+
+async function doLogout() { await SB.auth.signOut(); location.reload(); }
+
+async function load() {
+  try {
+    const [t, p, n, m, l] = await Promise.all([
+      SB.from('tasks').select('*'),
+      SB.from('profiles').select('*'),
+      SB.from('notifications').select('*').eq('user_id', me.id).order('created_at', { ascending: false }),
+      SB.from('messages').select('*').or(`sender_id.eq.${me.id},receiver_id.eq.${me.id}`).order('created_at', { ascending: true }),
+      SB.from('logbook').select('*').order('created_at', { ascending: false })
+    ]);
+    tasks = t.data || []; users = p.data || []; notifs = n.data || []; msgs = m.data || []; logs = l.data || [];
+    updB();
+  } catch (err) {
+    console.error('Error loading data:', err);
+  }
+}
+
+function startPoll() {
+  setInterval(async () => {
+    if (!me) return;
+    try {
+      const { data: n } = await SB.from('notifications').select('*').eq('user_id', me.id).order('created_at', { ascending: false }).limit(50);
+      const { data: m } = await SB.from('messages').select('*').or(`sender_id.eq.${me.id},receiver_id.eq.${me.id}`).order('created_at', { ascending: true });
+      if (n) notifs = n; if (m) msgs = m;
+      updB();
+      if (!document.getElementById('notifPanel').classList.contains('hidden')) rNotif();
+      if (!document.getElementById('chatPanel').classList.contains('hidden')) rChatM();
+    } catch (e) {}
+  }, 15000);
+}
+
+function lvl(p) {
+  const x = p || prof;
+  if (!x) return 3;
+  if (x.department_id === 'gerencia' || x.is_admin) return 1;
+  if (x.role_level) return x.role_level;
+  const r = (x.role || '').toLowerCase();
+  if (r.includes('jefe') || r.includes('gerente') || r.includes('director')) return 2;
+  return 3;
+}
+function canV() { return lvl() <= 2; }
+
+function openDept() {
+  const list = document.getElementById('deptList');
+  const acc = (lvl() === 1) ? Object.keys(DEPTS) : [dept];
+  list.innerHTML = acc.map(id => `
+    <button onclick="selD('${id}')" class="p-4 border-2 border-slate-200 rounded-xl hover:border-indigo-500 hover:bg-indigo-50 transition-all text-left">
+      <div class="text-3xl mb-2">${DEPTS[id].icon}</div>
+      <div class="font-bold text-slate-800">${DEPTS[id].name}</div>
+      <div class="text-sm text-slate-500 mt-1">${users.filter(p => p.department_id === id).length} integrantes</div>
+    </button>
+  `).join('');
+  document.getElementById('deptModal').classList.remove('hidden');
+}
+function selD(id) { dept = id; document.getElementById('deptModal').classList.add('hidden'); document.getElementById('dLabel').textContent = DEPTS[id].icon + ' ' + DEPTS[id].name; rTabs(); render(); }
+function closeDept() { document.getElementById('deptModal').classList.add('hidden'); doLogout(); }
+
+function isUnl(date, ud) {
+  const c = localStorage.getItem('tf_ul');
+  if (!c) return false;
+  try {
+    const { startDate, endDate, scope } = JSON.parse(c);
+    const d = new Date(date), s = new Date(startDate), e = new Date(endDate);
+    if (d < s || d > e) return false;
+    if (scope === 'all') return true;
+    if (scope === 'gerencia' && lvl() === 1) return true;
+    if (scope === 'department' && ud === dept) return true;
+  } catch (x) {}
+  return false;
+}
+function doUnlock() {
+  const s = document.getElementById('ulS').value, e = document.getElementById('ulE').value;
+  if (!s || !e) { toast('❌ Selecciona fechas'); return; }
+  const sc = document.querySelector('input[name="ulSc"]:checked').value;
+  localStorage.setItem('tf_ul', JSON.stringify({ startDate: s, endDate: e, scope: sc }));
+  document.getElementById('ulSt').innerHTML = `<strong>✅</strong> ${fmt(s)} al ${fmt(e)}`;
+  document.getElementById('ulModal').classList.add('hidden');
+  toast('🔓 Desbloqueado'); render();
+}
+function doReset() {
+  localStorage.removeItem('tf_ul');
+  document.getElementById('ulSt').innerHTML = '<strong>️</strong> Bloqueado por defecto.';
+  document.getElementById('ulModal').classList.add('hidden');
+  toast('🔄 Restablecido'); render();
+}
+function updUlSt() {
+  const c = localStorage.getItem('tf_ul'), el = document.getElementById('ulSt');
+  if (!c || !el) return;
+  try { const { startDate, endDate } = JSON.parse(c); el.innerHTML = `<strong>✅</strong> ${fmt(startDate)} al ${fmt(endDate)}`; } catch (x) {}
+}
+
+function rF(sec, opts = {}) {
+  const f = F[sec];
+  const dOpts = Object.keys(DEPTS).map(d => `<option value="${d}" ${f.dept === d ? 'selected' : ''}>${DEPTS[d].icon} ${DEPTS[d].name}</option>`).join('');
+  const rOpts = users.map(u => `<option value="${u.id}" ${f.responsible === u.id ? 'selected' : ''}>${u.full_name}</option>`).join('');
+  return `
+    <div class="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl border border-slate-200 p-4 mb-6 fade-in">
+      <div class="flex items-center justify-between mb-3">
+        <h4 class="text-sm font-bold text-slate-700">🔍 Filtros</h4>
+        <button onclick="cF('${sec}')" class="text-xs px-3 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg font-semibold">🔄 Limpiar</button>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        ${opts.search !== false ? `<div class="lg:col-span-2"><label class="block text-xs font-semibold text-slate-600 mb-1">🔍 BÚSQUEDA</label><input type="text" placeholder="Buscar..." value="${f.search || ''}" oninput="F['${sec}'].search=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"></div>` : ''}
+        ${opts.dept !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🏢 DEPTO</label><select onchange="F['${sec}'].dept=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${dOpts}</select></div>` : ''}
+        ${opts.responsible !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👤 RESPONSABLE</label><select onchange="F['${sec}'].responsible=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${rOpts}</select></div>` : ''}
+        ${opts.status !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📌 ESTADO</label><select onchange="F['${sec}'].status=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="pendiente" ${f.status === 'pendiente' ? 'selected' : ''}> Pendiente</option><option value="proceso" ${f.status === 'proceso' ? 'selected' : ''}>🔄 Proceso</option><option value="completada" ${f.status === 'completada' ? 'selected' : ''}>✅ Completada</option><option value="validated" ${f.status === 'validated' ? 'selected' : ''}>✓ Validada</option><option value="no_aplica" ${f.status === 'no_aplica' ? 'selected' : ''}>➖ No Aplica</option></select></div>` : ''}
+        ${opts.frequency !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔄 FRECUENCIA</label><select onchange="F['${sec}'].frequency=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="diaria" ${f.frequency === 'diaria' ? 'selected' : ''}>📅 Diaria</option><option value="semanal" ${f.frequency === 'semanal' ? 'selected' : ''}>📆 Semanal</option><option value="quincenal" ${f.frequency === 'quincenal' ? 'selected' : ''}> Quincenal</option><option value="mensual" ${f.frequency === 'mensual' ? 'selected' : ''}>📅 Mensual</option><option value="ocasional" ${f.frequency === 'ocasional' ? 'selected' : ''}>🔁 Ocasional</option><option value="unica" ${f.frequency === 'unica' ? 'selected' : ''}>📌 Única</option></select></div>` : ''}
+        ${opts.roleLevel ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1"> NIVEL</label><select onchange="F['${sec}'].roleLevel=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="1" ${f.roleLevel === '1' ? 'selected' : ''}>🏢 Gerencia</option><option value="2" ${f.roleLevel === '2' ? 'selected' : ''}>👔 Jefe</option><option value="3" ${f.roleLevel === '3' ? 'selected' : ''}>👤 Equipo</option></select></div>` : ''}
+        ${opts.category ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📂 CATEGORÍA</label><select onchange="F['${sec}'].category=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="general" ${f.category === 'general' ? 'selected' : ''}>📋 General</option><option value="incidencia" ${f.category === 'incidencia' ? 'selected' : ''}>⚠️ Incidencia</option><option value="observacion" ${f.category === 'observacion' ? 'selected' : ''}>👁️ Observación</option><option value="decision" ${f.category === 'decision' ? 'selected' : ''}>🎯 Decisión</option><option value="reunion" ${f.category === 'reunion' ? 'selected' : ''}> Reunión</option><option value="otro" ${f.category === 'otro' ? 'selected' : ''}>📌 Otro</option></select></div>` : ''}
+        ${opts.isAdmin ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔑 ADMIN</label><select onchange="F['${sec}'].isAdmin=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="true" ${f.isAdmin === 'true' ? 'selected' : ''}>✅ Admins</option><option value="false" ${f.isAdmin === 'false' ? 'selected' : ''}>👤 No Admins</option></select></div>` : ''}
+      </div>
+    </div>
+  `;
+}
+function cF(s) { F[s] = { search: '', status: 'all', frequency: 'all', responsible: 'all', dept: 'all', roleLevel: 'all', category: 'all', isAdmin: 'all' }; render(); }
+
+function rTabs() {
+  const tabs = [
+    { id: 'matrix', label: ' Matriz' },
+    { id: 'val', label: '✅ Validaciones' },
+    { id: 'log', label: '📝 Bitácora' },
+    { id: 'team', label: '👥 Equipo' }
+  ];
+  if (prof.is_admin) tabs.push({ id: 'admin', label: ' Admin' });
+  document.getElementById('tabs').innerHTML = tabs.map(t => `
+    <button onclick="go('${t.id}')" class="px-4 py-2 text-sm font-semibold rounded-lg whitespace-nowrap ${tab === t.id ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}">${t.label}</button>
+  `).join('');
+}
+function go(t) { tab = t; rTabs(); render(); }
+
+function render() {
+  const a = document.getElementById('content');
+  try {
+    const v = { matrix: rM, val: rV, log: rL, team: rT, admin: rA };
+    if (v[tab]) v[tab](a);
+  } catch (err) {
+    console.error('Render error:', err);
+    a.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-xl p-6"><p class="text-red-700 font-semibold">Error al renderizar: ${err.message}</p><pre class="text-xs mt-2 text-red-600">${err.stack}</pre></div>`;
+  }
+}
+
+function rM(a) {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const f = F.matrix;
+    const dates = [];
+    const s = new Date(); s.setDate(s.getDate() - 6);
+    for (let i = 0; i < 7; i++) { const d = new Date(s); d.setDate(d.getDate() + i); dates.push(d.toISOString().split('T')[0]); }
+    
+    let list = [...tasks];
+    if (lvl() === 3) list = list.filter(t => t.assignee_id === me.id);
+    else if (lvl() === 2) list = list.filter(t => t.department_id === dept);
+    if (f.dept !== 'all') list = list.filter(t => t.department_id === f.dept);
+    if (f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
+    if (f.frequency !== 'all') list = list.filter(t => t.frequency === f.frequency);
+    if (f.status !== 'all') list = list.filter(t => t.status === f.status || (f.status === 'validated' && t.validation_status === 'validated'));
+    if (f.search) { const q = f.search.toLowerCase(); list = list.filter(t => t.title.toLowerCase().includes(q)); }
+    
+    const byD = {};
+    list.forEach(t => {
+      if (!byD[t.department_id]) byD[t.department_id] = {};
+      if (!byD[t.department_id][t.assignee_id]) byD[t.department_id][t.assignee_id] = { user: users.find(p => p.id === t.assignee_id), tasks: [] };
+      byD[t.department_id][t.assignee_id].tasks.push(t);
+    });
+    
+    const tT = list.filter(t => t.due_date === today);
+    const cT = tT.filter(t => ['completada','validated','no_aplica'].includes(t.status));
+    const pV = tT.filter(t => t.status === 'completada' && (!t.validation_status || t.validation_status === 'pending'));
+    const eff = tT.length > 0 ? Math.round((cT.length / tT.length) * 100) : 0;
+    
+    const ulB = lvl() === 1 ? `<button onclick="openUl()" class="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-semibold hover:bg-amber-600">🔓 Desbloquear</button>` : '';
+    
+    let h = `
+      <div class="fade-in">
+        <div class="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div><h2 class="text-2xl font-bold">📅 Matriz de Cumplimiento</h2><p class="text-slate-500">${DEPTS[dept].name} · ${list.length} tareas</p></div>
+          <div class="flex flex-wrap gap-2">${ulB}<button onclick="openT()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold">➕ Nueva Tarea</button></div>
+        </div>
+        ${rF('matrix')}
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="bg-white rounded-xl p-4 border shadow-sm"><p class="text-xs text-slate-500 font-semibold">🎯 EFICIENCIA</p><p class="text-3xl font-bold text-indigo-600">${eff}%</p></div>
+          <div class="bg-white rounded-xl p-4 border shadow-sm"><p class="text-xs text-slate-500 font-semibold">✅ COMPLETADAS</p><p class="text-3xl font-bold text-emerald-600">${cT.length}/${tT.length}</p></div>
+          <div class="bg-white rounded-xl p-4 border shadow-sm"><p class="text-xs text-slate-500 font-semibold">⏳ PEND. VALIDACIÓN</p><p class="text-3xl font-bold text-orange-600">${pV.length}</p></div>
+          <div class="bg-white rounded-xl p-4 border shadow-sm"><p class="text-xs text-slate-500 font-semibold">📅 DÍAS</p><p class="text-3xl font-bold text-slate-600">7</p></div>
+        </div>
+        <div class="bg-white rounded-xl p-4 mb-4 border">
+          <p class="text-sm font-bold mb-2">📋 Leyenda:</p>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <span class="px-2 py-1 rounded st-comp">✅ Realizado</span>
+            <span class="px-2 py-1 rounded st-proc">🔄 En proceso</span>
+            <span class="px-2 py-1 rounded st-pend">⏳ Pendiente</span>
+            <span class="px-2 py-1 rounded st-val">✓ Validado</span>
+            <span class="px-2 py-1 rounded st-na">➖ No Aplica</span>
+            <span class="px-2 py-1 rounded bg-blue-200 text-blue-800">📅 Hoy (editable)</span>
+            <span class="px-2 py-1 rounded bg-slate-300 text-slate-700">🔒 Bloqueado</span>
+          </div>
+        </div>
+    `;
+    
+    if (Object.keys(byD).length === 0) {
+      h += `<div class="bg-white rounded-xl border p-12 text-center"><div class="text-6xl mb-4">📋</div><p class="text-slate-500 font-semibold">No hay tareas para mostrar</p><p class="text-sm text-slate-400 mt-2">Crea una nueva tarea para comenzar</p></div>`;
+    } else {
+      Object.keys(byD).forEach(did => {
+        h += `<div class="mb-6"><div class="bg-slate-800 text-white rounded-t-lg p-3 font-bold text-lg">${DEPTS[did]?.icon || ''} ${DEPTS[did]?.name || did}</div><div class="bg-white rounded-b-lg border overflow-hidden">`;
+        Object.values(byD[did]).forEach(({ user, tasks: ut }) => {
+          h += `<div class="bg-slate-100 p-2 font-semibold border-b flex items-center justify-between">
+            <span>${user?.full_name || '?'} - ${user?.role || ''}</span>
+            <button onclick="openT()" class="text-xs px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">➕ Agregar</button>
+          </div>`;
+          h += `<div class="overflow-x-auto"><table class="w-full text-xs"><thead class="bg-slate-50"><tr>
+            <th class="p-2 text-left border-b border-r w-8">N°</th>
+            <th class="p-2 text-left border-b border-r min-w-[200px]">TAREA</th>
+            <th class="p-2 text-left border-b border-r w-20">FREQ</th>
+            ${dates.map(d => `<th class="p-2 text-center border-b border-r w-20 ${d===today?'bg-blue-100 font-bold':''}">${fmt(d)}</th>`).join('')}
+            <th class="p-2 text-left border-b border-r w-16">ACC</th>
+          </tr></thead><tbody>`;
+          
+          const titles = [...new Set(ut.map(t => t.title))];
+          titles.forEach((title, idx) => {
+            const tpl = ut.find(t => t.title === title);
+            const sd = tpl.start_date || tpl.due_date || today;
+            h += `<tr class="border-b hover:bg-slate-50">
+              <td class="p-2 border-r">${idx + 1}</td>
+              <td class="p-2 border-r font-medium">${esc(title)}</td>
+              <td class="p-2 border-r">${fL(tpl.frequency)}</td>`;
+            
+            dates.forEach(d => {
+              const td = ut.find(t => t.title === title && t.due_date === d);
+              let st = 'pendiente', txt = 'Pendiente', cls = 'st-pend';
+              if (d < sd) { st = 'futura'; txt = '⏪'; cls = 'cell-fut'; }
+              else if (td) {
+                if (td.validation_status === 'validated') { st = 'validated'; txt = '✓'; cls = 'st-val'; }
+                else if (td.status === 'no_aplica') { st = 'no_aplica'; txt = 'N/A'; cls = 'st-na'; }
+                else if (td.status === 'completada') { st = 'completada'; txt = '✓'; cls = 'st-comp'; }
+                else if (td.status === 'proceso') { st = 'proceso'; txt = ''; cls = 'st-proc'; }
+              }
+              const can = d === today || (d < today && isUnl(d, user.department_id));
+              const tid = td ? td.id : tpl.id;
+              const mode = td ? 'edit' : 'create';
+              h += `<td class="p-1 text-center border-r ${can ? 'cell-ok' : 'cell-no'}" ${can ? `onclick="openM('${tid}','${d}','${mode}')"` : ''}>
+                <span class="${cls} px-2 py-1 rounded text-[10px] font-semibold">${txt}</span>
+              </td>`;
+            });
+            h += `<td class="p-2 border-r"><button onclick="delT('${tpl.id}')" class="text-red-600 hover:text-red-800 text-xs">🗑️</button></td>`;
+            h += `</tr>`;
+          });
+          h += `</tbody></table></div>`;
+        });
+        h += `</div></div>`;
+      });
+    }
+    a.innerHTML = h + `</div>`;
+  } catch (err) {
+    console.error('Matrix render error:', err);
+    a.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-xl p-6"><p class="text-red-700 font-semibold">Error en Matriz: ${err.message}</p></div>`;
+  }
+}
+
+function fL(f) { return { diaria: '📅', semanal: '', quincenal: '📆', mensual: '📅', ocasional: '🔁', unica: '📌' }[f] || f; }
+
+function openUl() { updUlSt(); document.getElementById('ulModal').classList.remove('hidden'); }
+
+function openM(tid, date, mode) {
+  const t = tasks.find(x => x.id === tid);
+  if (!t) { toast('❌ No encontrada'); return; }
+  mTask = t; mDate = date; mMode = mode;
+  document.getElementById('mDate').textContent = fmt(date);
+  document.getElementById('mTask').textContent = t.title;
+  document.getElementById('mInfo').textContent = `Frecuencia: ${t.frequency} · ${users.find(p=>p.id===t.assignee_id)?.full_name||'?'}`;
+  const act = document.getElementById('mAct');
+  if (mode === 'create') { act.className = 'mb-3 text-xs font-semibold px-3 py-2 rounded-lg bg-blue-100 text-blue-700'; act.textContent = '📌 Se creará una nueva instancia para esta fecha'; }
+  else { act.className = 'mb-3 text-xs font-semibold px-3 py-2 rounded-lg bg-amber-100 text-amber-700'; act.textContent = '✏️ Se actualizará la tarea existente'; }
+  document.getElementById('mModal').classList.remove('hidden');
+}
+function closeM() { document.getElementById('mModal').classList.add('hidden'); mTask = null; mDate = null; mMode = null; }
+
+async function setStatus(ns) {
+  if (!mTask || !mDate) return;
+  try {
+    const ud = { status: ns };
+    if (['completada','no_aplica'].includes(ns)) {
+      ud.completed_at = new Date().toISOString(); ud.completed_by = me.id;
+      if (lvl() === 1) { ud.validation_status = 'validated'; ud.validated_at = new Date().toISOString(); ud.validated_by = me.id; }
+      else { ud.validation_status = 'pending'; }
+    } else if (ns === 'pendiente' || ns === 'proceso') { ud.validation_status = null; ud.validated_at = null; ud.validated_by = null; }
+    
+    if (mMode === 'create') {
+      ud.due_date = mDate;
+      ud.title = mTask.title + ' (' + fmt(mDate) + ')';
+      const { error } = await SB.from('tasks').insert(ud);
+      if (error) throw error;
+    } else {
+      const { error } = await SB.from('tasks').update(ud).eq('id', mTask.id);
+      if (error) throw error;
+    }
+    closeM(); await load(); render(); toast('✅ Actualizado');
+  } catch (err) { toast('❌ ' + err.message); }
+}
+
+function rV(a) {
+  if (!canV()) { a.innerHTML = `<div class="text-center py-16"><div class="text-6xl mb-4">🔒</div><h2 class="text-2xl font-bold">Acceso Restringido</h2><p>Solo Jefes y Gerencia</p></div>`; return; }
+  const lv = lvl(), f = F.val;
+  let list = tasks.filter(t => t.status === 'completada' && t.assignee_id !== me.id && (!t.validation_status || t.validation_status === 'pending'));
+  if (lv === 2) { const tm = users.filter(p => p.department_id === dept && lvl(p) === 3).map(p => p.id); list = list.filter(t => tm.includes(t.assignee_id)); }
+  else if (lv === 1) { const al = users.filter(p => lvl(p) === 2 || lvl(p) === 3).map(p => p.id); list = list.filter(t => al.includes(t.assignee_id)); }
+  if (f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
+  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(t => t.title.toLowerCase().includes(q)); }
+  
+  a.innerHTML = `
+    <div class="fade-in max-w-5xl mx-auto">
+      <h2 class="text-2xl font-bold mb-6">✅ Validaciones Pendientes (${list.length})</h2>
+      ${rF('val', { dept: false, status: false, frequency: false })}
+      ${list.length === 0 ? '<div class="bg-white rounded-xl p-12 text-center border"><p class="text-slate-500">🎉 Sin pendientes</p></div>' :
+      `<div class="space-y-3">${list.map(t => {
+        const u = users.find(p=>p.id===t.assignee_id), ul = lvl(u);
+        const b = ul === 1 ? '<span class="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs">Gerencia</span>' : ul === 2 ? '<span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">Jefe</span>' : '<span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">Equipo</span>';
+        return `<div class="bg-white rounded-xl border p-4 flex justify-between items-center">
+          <div><h3 class="font-bold">${esc(t.title)}</h3><p class="text-sm text-slate-600 mt-1"> ${u?.full_name||'?'} · ${b} · 📅 ${t.completed_at?fmt(t.completed_at):'Sin fecha'}</p><p class="text-xs text-slate-500 mt-1">🏢 ${DEPTS[u?.department_id]?.name || ''}</p></div>
+          <button onclick="openV('${t.id}')" class="px-4 py-2 bg-indigo-500 text-white rounded-lg">Validar</button>
+        </div>`;
+      }).join('')}</div>`}
+    </div>
+  `;
+}
+
+function openV(id) { vTask = tasks.find(t=>t.id===id); document.getElementById('vTask').textContent = vTask.title; document.getElementById('vUser').textContent = `Responsable: ${users.find(p=>p.id===vTask.assignee_id)?.full_name||'?'}`; document.getElementById('vModal').classList.remove('hidden'); }
+function closeV() { document.getElementById('vModal').classList.add('hidden'); vTask = null; }
+
+async function doVal() {
+  if (!vTask) return;
+  await SB.from('tasks').update({ validation_status:'validated', validation_observations:document.getElementById('vObs').value||'Aprobado', validated_at:new Date().toISOString(), validated_by:me.id }).eq('id', vTask.id);
+  closeV(); await load(); render(); toast('✅ Validada');
+}
+async function doRej() {
+  if (!vTask) return;
+  await SB.from('tasks').update({ validation_status:'rejected', validation_observations:'Rechazado: '+document.getElementById('vObs').value, status:'pendiente' }).eq('id', vTask.id);
+  closeV(); await load(); render(); toast(' Rechazada');
+}
+
+function rL(a) {
+  const entries = logs.filter(e => e.user_id === me.id), f = F.log;
+  let list = entries;
+  if (f.category !== 'all') list = list.filter(e => e.category === f.category);
+  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(e => e.content.toLowerCase().includes(q)); }
+  a.innerHTML = `
+    <div class="fade-in max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold">📝 Mi Bitácora Personal</h2><p class="text-slate-500">Privada - solo tú la ves</p></div><button onclick="document.getElementById('logModal').classList.remove('hidden')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Nueva</button></div>
+      ${rF('log', { dept: false, status: false, frequency: false, responsible: false, category: true })}
+      <div class="space-y-3">
+        ${list.length === 0 ? `<div class="bg-white rounded-xl p-12 text-center border"><div class="text-6xl mb-4">📝</div><p class="text-slate-500 font-semibold">Vacía</p></div>` : list.map(e => `
+          <div class="bg-white rounded-xl border p-4 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start mb-3">
+              <div class="flex items-center gap-2"><span class="text-xs px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-semibold">${e.category}</span><span class="text-xs text-slate-400">📅 ${fmt(e.entry_date)}</span></div>
+              <button onclick="delL('${e.id}')" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-sm">️</button>
+            </div>
+            <p class="text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">${esc(e.content)}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+document.getElementById('logForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  await SB.from('logbook').insert({ user_id: me.id, user_name: prof.full_name, department_id: dept, entry_date: document.getElementById('logD').value, category: document.getElementById('logC').value, content: document.getElementById('logT').value.trim() });
+  document.getElementById('logModal').classList.add('hidden'); document.getElementById('logForm').reset();
+  await load(); render(); toast('✅ Guardada');
+});
+async function delL(id) { if (!confirm('¿Eliminar?')) return; await SB.from('logbook').delete().eq('id', id); await load(); render(); toast('️ Eliminada'); }
+
+function rT(a) {
+  const f = F.team;
+  let list = users.filter(u => u.department_id === dept);
+  if (f.roleLevel !== 'all') list = list.filter(u => u.role_level == f.roleLevel);
+  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(u => u.full_name.toLowerCase().includes(q)); }
+  a.innerHTML = `
+    <div class="fade-in max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold mb-6">👥 Equipo de ${DEPTS[dept].name}</h2>
+      ${rF('team', { dept: false, status: false, frequency: false, responsible: false, roleLevel: true })}
+      <div class="space-y-3">
+        ${list.map(u => {
+          const ut = tasks.filter(t => t.assignee_id === u.id), co = ut.filter(t => ['completada','validated'].includes(t.status)).length;
+          const rate = ut.length > 0 ? Math.round((co / ut.length) * 100) : 0;
+          const b = u.role_level === 1 ? '<span class="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs">Gerencia</span>' : u.role_level === 2 ? '<span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">Jefe</span>' : '<span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">Equipo</span>';
+          return `<div class="bg-white rounded-xl border p-4 flex items-center justify-between"><div><p class="font-bold">${u.full_name} ${b}</p><p class="text-sm text-slate-500">${u.role}</p></div><div class="text-right"><p class="text-2xl font-bold text-indigo-600">${rate}%</p><p class="text-xs text-slate-500">${co}/${ut.length}</p></div></div>`;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function rA(a) {
+  if (!prof.is_admin) { a.innerHTML = '<p class="text-center py-12">Acceso restringido</p>'; return; }
+  const f = F.admin;
+  let list = [...users];
+  if (f.dept !== 'all') list = list.filter(p => p.department_id === f.dept);
+  if (f.roleLevel !== 'all') list = list.filter(p => p.role_level == f.roleLevel);
+  if (f.isAdmin !== 'all') list = list.filter(p => String(p.is_admin) === f.isAdmin);
+  if (f.search) { const q = f.search.toLowerCase(); list = list.filter(p => p.full_name.toLowerCase().includes(q) || p.email.toLowerCase().includes(q)); }
+  a.innerHTML = `
+    <div class="fade-in">
+      <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold"> Administración</h2><p class="text-gray-500">(${list.length} de ${users.length})</p></div><button onclick="openU()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Crear Usuario</button></div>
+      ${rF('admin', { status: false, frequency: false, responsible: false, roleLevel: true, isAdmin: true })}
+      <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
+        <table class="w-full">
+          <thead class="bg-gray-50 border-b"><tr><th class="text-left p-3">Nombre</th><th class="text-left p-3">Email</th><th class="text-left p-3">Depto</th><th class="text-left p-3">Cargo</th><th class="text-left p-3">Nivel</th><th class="text-left p-3">Acciones</th></tr></thead>
+          <tbody class="divide-y">
+            ${list.map(p => {
+              const b = p.role_level === 1 ? '<span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs"> Gerencia</span>' : p.role_level === 2 ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">👔 Jefe</span>' : '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">👤 Equipo</span>';
+              return `<tr class="hover:bg-gray-50"><td class="p-3 font-semibold">${p.full_name}</td><td class="p-3 text-sm text-gray-600">${p.email}</td><td class="p-3 text-sm">${DEPTS[p.department_id]?.icon || ''} ${DEPTS[p.department_id]?.name || p.department_id}</td><td class="p-3 text-sm">${p.role || '-'}</td><td class="p-3">${b} ${p.is_admin ? '<span class="ml-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Admin</span>' : ''}</td><td class="p-3"><div class="flex gap-2"><button onclick="editU('${p.id}')" class="text-indigo-600 hover:underline text-sm">✏️ Editar</button>${p.id !== me.id ? `<button onclick="delU('${p.id}')" class="text-red-600 hover:underline text-sm">🗑️</button>` : '<span class="text-gray-400 text-sm">(Tú)</span>'}</div></td></tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function openU() { document.getElementById('uTitle').textContent = '➕ Crear Usuario'; document.getElementById('uBtn').textContent = 'Crear'; document.getElementById('uId').value = ''; document.getElementById('uForm').reset(); document.getElementById('uPF').style.display = 'block'; document.getElementById('uEmail').removeAttribute('readonly'); document.getElementById('uModal').classList.remove('hidden'); }
+function editU(id) { const u = users.find(p => p.id === id); if (!u) return; document.getElementById('uTitle').textContent = '✏️ Editar Usuario'; document.getElementById('uBtn').textContent = 'Guardar'; document.getElementById('uId').value = id; document.getElementById('uEmail').value = u.email; document.getElementById('uEmail').setAttribute('readonly', true); document.getElementById('uName2').value = u.full_name; document.getElementById('uDept').value = u.department_id; document.getElementById('uRole').value = u.role || ''; document.getElementById('uLvl').value = u.role_level || 3; document.getElementById('uAdm').checked = u.is_admin || false; document.getElementById('uPF').style.display = 'none'; document.getElementById('uModal').classList.remove('hidden'); }
+
+document.getElementById('uForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const eid = document.getElementById('uId').value, email = document.getElementById('uEmail').value, name = document.getElementById('uName2').value, d = document.getElementById('uDept').value, role = document.getElementById('uRole').value, lv = parseInt(document.getElementById('uLvl').value), adm = document.getElementById('uAdm').checked;
+  try {
+    if (eid) { const { error } = await SB.from('profiles').update({ full_name: name, department_id: d, role: role || 'Analista', role_level: lv, is_admin: adm }).eq('id', eid); if (error) throw error; toast('✅ Actualizado'); }
+    else { const pass = document.getElementById('uPass').value; if (!pass || pass.length < 6) { toast('❌ Mín. 6 caracteres'); return; } const { error } = await SB.rpc('create_user_with_profile', { p_email: email, p_password: pass, p_full_name: name, p_department_id: d, p_role: role || 'Analista', p_role_level: lv, p_is_admin: adm }); if (error) throw error; toast('✅ Creado'); }
+    document.getElementById('uModal').classList.add('hidden'); document.getElementById('uForm').reset(); await load(); render();
+  } catch (err) { toast('❌ ' + err.message); }
+});
+async function delU(id) { if (!confirm('¿Eliminar?')) return; await SB.from('profiles').delete().eq('id', id); toast('🗑️ Eliminado'); await load(); render(); }
+
+function toggleP(id) { const p = document.getElementById(id); p.classList.toggle('hidden'); if (!p.classList.contains('hidden')) { if (id === 'notifPanel') rNotif(); if (id === 'chatPanel') { rChatU(); rChatM(); } } }
+
+function rNotif() { const l = document.getElementById('notifList'); if (notifs.length === 0) { l.innerHTML = '<p class="text-sm text-slate-500 italic text-center py-4">Sin notificaciones</p>'; return; } l.innerHTML = notifs.map(n => `<div class="p-3 ${n.is_read ? 'bg-white' : 'bg-indigo-50'} rounded-lg mb-2 cursor-pointer" onclick="markR('${n.id}')"><p class="text-xs font-bold">${esc(n.title)}</p><p class="text-xs text-slate-600">${esc(n.message)}</p><p class="text-[10px] text-slate-400 mt-1">${ago(new Date(n.created_at))}</p></div>`).join(''); }
+async function markR(id) { await SB.from('notifications').update({ is_read: true }).eq('id', id); await load(); rNotif(); }
+async function markAll() { const u = notifs.filter(n => !n.is_read).map(n => n.id); if (!u.length) return; await SB.from('notifications').update({ is_read: true }).in('id', u); await load(); rNotif(); toast('✅ Leídas'); }
+
+function rChatU() { const c = document.getElementById('chatU'), us = users.filter(u => u.id !== me.id); c.innerHTML = `<p class="text-xs text-slate-500 mb-2">Selecciona:</p><div class="space-y-1">` + us.map(u => { const un = msgs.filter(m => m.sender_id === u.id && m.receiver_id === me.id && !m.is_read).length; return `<button onclick="selC('${u.id}')" class="w-full flex items-center gap-2 p-2 ${chatWith === u.id ? 'bg-indigo-100' : 'hover:bg-gray-100'} rounded-lg"><div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">${u.full_name.split(' ').map(n=>n[0]).join('').slice(0,2)}</div><div class="flex-1 text-left"><p class="text-xs font-semibold truncate">${u.full_name}</p><p class="text-[10px] text-slate-500">${DEPTS[u.department_id]?.name || ''}</p></div>${un > 0 ? `<span class="bg-blue-500 text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center">${un}</span>` : ''}</button>`; }).join('') + `</div>`; }
+function selC(id) { chatWith = id; rChatU(); rChatM(); const un = msgs.filter(m => m.sender_id === id && m.receiver_id === me.id && !m.is_read); if (un.length > 0) { SB.from('messages').update({ is_read: true }).in('id', un.map(m => m.id)); load(); } }
+function rChatM() { const c = document.getElementById('chatM'); if (!chatWith) { c.innerHTML = '<p class="text-sm text-slate-500 italic text-center py-8">Selecciona un usuario</p>'; return; } const cm = msgs.filter(m => (m.sender_id === me.id && m.receiver_id === chatWith) || (m.sender_id === chatWith && m.receiver_id === me.id)).sort((a,b) => new Date(a.created_at) - new Date(b.created_at)); c.innerHTML = cm.map(m => { const im = m.sender_id === me.id; return `<div class="flex ${im ? 'justify-end' : 'justify-start'} mb-2"><div class="max-w-[75%] px-3 py-2 rounded-2xl ${im ? 'bg-indigo-600 text-white' : 'bg-white border'}"><p class="text-xs">${esc(m.message)}</p><p class="text-[10px] ${im ? 'text-indigo-100' : 'text-slate-400'} mt-1">${ago(new Date(m.created_at))}</p></div></div>`; }).join(''); c.scrollTop = c.scrollHeight; }
+async function sendChat() { const i = document.getElementById('chatI'), t = i.value.trim(); if (!t || !chatWith) return; await SB.from('messages').insert({ sender_id: me.id, receiver_id: chatWith, message: t }); i.value = ''; await load(); rChatM(); }
+document.getElementById('chatI').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendChat(); });
+
+function openT(eid = null) { const f = document.getElementById('taskForm'); if (eid) { const t = tasks.find(x => x.id === eid); document.getElementById('tTitle').textContent = 'Editar Tarea'; document.getElementById('tId').value = t.id; document.getElementById('tName').value = t.title; document.getElementById('tDesc').value = t.description || ''; document.getElementById('tDept').value = t.department_id; document.getElementById('tDue').value = t.due_date || ''; document.getElementById('tStart').value = t.start_date || ''; document.getElementById('tFreq').value = t.frequency; document.getElementById('tPri').value = t.priority; } else { document.getElementById('tTitle').textContent = 'Nueva Tarea'; f.reset(); document.getElementById('tId').value = ''; document.getElementById('tStart').value = new Date().toISOString().split('T')[0]; } const s = document.getElementById('tUser'); s.innerHTML = '<option value="">Seleccionar...</option>' + users.map(p => `<option value="${p.id}">${p.full_name} - ${DEPTS[p.department_id]?.name || ''}</option>`).join(''); if (eid) { const t = tasks.find(x => x.id === eid); s.value = t.assignee_id; } document.getElementById('taskModal').classList.remove('hidden'); }
+function closeTask() { document.getElementById('taskModal').classList.add('hidden'); }
+
+document.getElementById('taskForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('tId').value, d = { title: document.getElementById('tName').value, description: document.getElementById('tDesc').value, assignee_id: document.getElementById('tUser').value, department_id: document.getElementById('tDept').value, due_date: document.getElementById('tDue').value || null, start_date: document.getElementById('tStart').value || null, frequency: document.getElementById('tFreq').value, priority: document.getElementById('tPri').value, created_by: me.id };
+  if (id) { await SB.from('tasks').update(d).eq('id', id); toast('✅ Actualizada'); } else { await SB.from('tasks').insert(d); toast('✅ Creada'); }
+  closeTask(); await load(); render();
+});
+
+async function delT(id) { if (!confirm('¿Eliminar permanentemente?')) return; await SB.from('tasks').delete().eq('id', id); toast('🗑️ Eliminada'); await load(); render(); }
+
+function updB() { const un = notifs.filter(n => !n.is_read).length, uc = msgs.filter(m => m.receiver_id === me.id && !m.is_read).length; const nb = document.getElementById('nBadge'), cb = document.getElementById('cBadge'); nb.textContent = un; nb.classList.toggle('hidden', un === 0); cb.textContent = uc; cb.classList.toggle('hidden', uc === 0); }
+function fmt(d) { if (!d) return ''; return new Date(d + 'T00:00:00').toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }); }
+function ago(d) { const m = Math.floor((Date.now() - d.getTime()) / 60000); if (m < 1) return 'ahora'; if (m < 60) return `hace ${m}m`; const h = Math.floor(m / 60); if (h < 24) return `hace ${h}h`; return `hace ${Math.floor(h/24)}d`; }
+function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'fixed bottom-6 right-6 px-6 py-3 rounded-xl shadow-lg text-white font-semibold fade-in bg-emerald-600'; setTimeout(() => t.classList.add('hidden'), 3000); }
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#notifPanel') && !e.target.closest('[onclick*="toggleP"]')) document.getElementById('notifPanel').classList.add('hidden');
+  if (!e.target.closest('#chatPanel') && !e.target.closest('[onclick*="toggleP"]')) document.getElementById('chatPanel').classList.add('hidden');
+});
+</script>
+</body>
+</html>
