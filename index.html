@@ -641,34 +641,54 @@ function rM(a) {
               <td class="p-2 border-r font-medium">${esc(title)}</td>
               <td class="p-2 border-r">${freq}</td>`;
             
-            dates.forEach(d => {
-              const td = ut.find(t => t.title === title && t.due_date === d);
-              let st = 'pendiente', txt = 'Pendiente', cls = 'st-pend';
-              
-              if (d < sd) { 
-                st = 'futura'; txt = '⏪'; cls = 'cell-fut'; 
-              } else if (td) {
-                if (td.validation_status === 'validated') { 
-                  st = 'validated'; txt = '✓'; cls = 'st-val'; 
-                } else if (td.status === 'no_aplica') { 
-                  st = 'no_aplica'; txt = 'N/A'; cls = 'st-na'; 
-                } else if (td.status === 'completada') { 
-                  st = 'completada'; txt = '✓'; cls = 'st-comp'; 
-                } else if (td.status === 'proceso') { 
-                  st = 'proceso'; txt = '⚙'; cls = 'st-proc'; 
-                }
-              }
-              
-              const userDept = user?.department_id || did;
-              const can = d === today || (d < today && isUnl(d, userDept));
-              const tid = td ? td.id : tpl.id;
-              const mode = td ? 'edit' : 'create';
-              
-              h += `<td class="p-1 text-center border-r ${can ? 'cell-ok' : 'cell-no'}" 
-                   ${can ? `onclick="openM('${tid}','${d}','${mode}')"` : ''}>
-                <span class="${cls} px-2 py-1 rounded text-[10px] font-semibold">${txt}</span>
-              </td>`;
-            });
+           dates.forEach(d => {
+  const td = ut.find(t => t.title === title && t.due_date === d);
+  
+  // 🎯 CORRECCIÓN PARA TAREAS ÚNICAS
+  if (tpl.frequency === 'unica') {
+    // Si no es la fecha exacta de vencimiento, no mostrar
+    if (d !== (tpl.due_date || tpl.start_date)) {
+      h += `<td class="p-1 text-center border-r cell-fut">
+        <span class="px-2 py-1 rounded text-[10px] font-semibold">-</span>
+      </td>`;
+      return; // Saltar al siguiente día
+    }
+    
+    // Si ya está completada y es una fecha pasada, no mostrar como pendiente
+    if (d < today && td && ['completada', 'validated', 'no_aplica'].includes(td.status)) {
+      h += `<td class="p-1 text-center border-r cell-fut">
+        <span class="px-2 py-1 rounded text-[10px] font-semibold">-</span>
+      </td>`;
+      return;
+    }
+  }
+  
+  let st = 'pendiente', txt = 'Pendiente', cls = 'st-pend';
+  
+  if (d < sd) { 
+    st = 'futura'; txt = '⏪'; cls = 'cell-fut'; 
+  } else if (td) {
+    if (td.validation_status === 'validated') { 
+      st = 'validated'; txt = '✓'; cls = 'st-val'; 
+    } else if (td.status === 'no_aplica') { 
+      st = 'no_aplica'; txt = 'N/A'; cls = 'st-na'; 
+    } else if (td.status === 'completada') { 
+      st = 'completada'; txt = '✓'; cls = 'st-comp'; 
+    } else if (td.status === 'proceso') { 
+      st = 'proceso'; txt = '⚙'; cls = 'st-proc'; 
+    }
+  }
+  
+  const userDept = user?.department_id || did;
+  const can = d === today || (d < today && isUnl(d, userDept));
+  const tid = td ? td.id : tpl.id;
+  const mode = td ? 'edit' : 'create';
+  
+  h += `<td class="p-1 text-center border-r ${can ? 'cell-ok' : 'cell-no'}" 
+       ${can ? `onclick="openM('${tid}','${d}','${mode}')"` : ''}>
+    <span class="${cls} px-2 py-1 rounded text-[10px] font-semibold">${txt}</span>
+  </td>`;
+});
             
             h += `<td class="p-2 border-r">
               <div class="flex gap-2">
