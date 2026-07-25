@@ -678,8 +678,9 @@ function rM(a) {
                 }
               }
               
-              const userDept = user?.department_id || did;
-              const can = d === today || (d < today && isUnl(d, userDept));
+const userDept = user?.department_id || did;
+// Gerencia (Nivel 1) siempre puede editar, otros necesitan desbloqueo
+const can = d === today || (d < today && (lvl() === 1 || isUnl(d, userDept)));
               const tid = td ? td.id : tpl.id;
               const mode = td ? 'edit' : 'create';
               
