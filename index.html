@@ -643,7 +643,15 @@ function rM(a) {
               <td class="p-2 border-r">${freq}</td>`;
             
             dates.forEach(d => {
-              const td = ut.find(t => t.title === title && t.due_date === d);
+              // Convertir fecha de matriz a formato YYYY-MM-DD
+const matrixDate = new Date(d).toISOString().split('T')[0];
+
+// Buscar tarea con fecha coincidente
+const td = ut.find(t => {
+  if (!t.due_date) return false;
+  const taskDate = new Date(t.due_date).toISOString().split('T')[0];
+  return t.title === title && taskDate === matrixDate;
+});
               
               // 🎯 CORRECCIÓN PARA TAREAS ÚNICAS
               if (tpl.frequency === 'unica') {
