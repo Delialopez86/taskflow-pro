@@ -112,7 +112,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
           <option value="ctasctes">📋 Cuentas Corrientes</option>
           <option value="contabilidad">📊 Contabilidad</option>
           <option value="rrhh">👥 RRHH</option>
-          <option value="gerencia"> Gerencia</option>
+          <option value="gerencia">🏢 Gerencia</option>
         </select>
       </div>
       <div class="grid grid-cols-2 gap-3">
@@ -132,10 +132,10 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
         </div>
         <div><label class="block text-sm font-semibold mb-1">Prioridad</label>
           <select id="tPri" class="w-full px-3 py-2 border rounded-lg">
-            <option value="baja"> Baja</option>
+            <option value="baja">🟢 Baja</option>
             <option value="media" selected>🟡 Media</option>
             <option value="alta">🔴 Alta</option>
-            <option value="urgente"> Urgente</option>
+            <option value="urgente">🚨 Urgente</option>
           </select>
         </div>
       </div>
@@ -155,9 +155,9 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
     <div id="mAct" class="mb-3 text-xs font-semibold px-3 py-2 rounded-lg"></div>
     <div id="mButtons" class="space-y-2">
       <button onclick="setStatus('pendiente')" class="w-full px-4 py-3 bg-red-500 text-white rounded-lg font-semibold">⏳ Pendiente</button>
-      <button onclick="setStatus('proceso')" class="w-full px-4 py-3 bg-yellow-500 text-white rounded-lg font-semibold">🔄 En proceso</button>
+      <button onclick="setStatus('proceso')" class="w-full px-4 py-3 bg-yellow-500 text-white rounded-lg font-semibold"> En proceso</button>
       <button onclick="setStatus('completada')" class="w-full px-4 py-3 bg-emerald-500 text-white rounded-lg font-semibold">✅ Realizado</button>
-      <button onclick="showNoAplicaModal()" class="w-full px-4 py-3 bg-orange-500 text-white rounded-lg font-semibold">➖ No Aplica</button>
+      <button onclick="showNoAplicaModal()" class="w-full px-4 py-3 bg-orange-500 text-white rounded-lg font-semibold"> No Aplica</button>
       <button onclick="closeM()" class="w-full px-4 py-3 bg-slate-200 text-slate-700 rounded-lg font-semibold">Cancelar</button>
     </div>
     <div id="noAplicaSection" class="hidden mt-4 pt-4 border-t">
@@ -200,15 +200,15 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
           <option value="ctasctes">📋 Cuentas Corrientes</option>
           <option value="contabilidad">📊 Contabilidad</option>
           <option value="rrhh">👥 RRHH</option>
-          <option value="gerencia"> Gerencia</option>
+          <option value="gerencia">🏢 Gerencia</option>
         </select>
       </div>
       <div><label class="block text-sm font-semibold mb-1">Cargo</label><input type="text" id="uRole" class="w-full px-3 py-2 border rounded-lg"></div>
       <div><label class="block text-sm font-semibold mb-1">Nivel *</label>
         <select id="uLvl" required class="w-full px-3 py-2 border rounded-lg">
-          <option value="3"> Equipo (Nivel 3)</option>
+          <option value="3">👤 Equipo (Nivel 3)</option>
           <option value="2">👔 Jefe (Nivel 2)</option>
-          <option value="1">🏢 Gerencia (Nivel 1)</option>
+          <option value="1"> Gerencia (Nivel 1)</option>
         </select>
       </div>
       <label class="flex items-center gap-2 p-3 bg-slate-50 rounded-lg">
@@ -228,11 +228,11 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
     <h3 class="text-xl font-bold mb-4">📝 Nueva Entrada</h3>
     <form id="logForm" class="space-y-3">
       <div><label class="block text-sm font-semibold mb-1">📅 Fecha</label><input type="date" id="logD" required class="w-full px-3 py-2 border rounded-lg"></div>
-      <div><label class="block text-sm font-semibold mb-1"> Categoría</label>
+      <div><label class="block text-sm font-semibold mb-1">📂 Categoría</label>
         <select id="logC" class="w-full px-3 py-2 border rounded-lg">
           <option value="general">📋 General</option>
-          <option value="incidencia">⚠️ Incidencia</option>
-          <option value="observacion">️ Observación</option>
+          <option value="incidencia">️ Incidencia</option>
+          <option value="observacion">👁️ Observación</option>
           <option value="decision">🎯 Decisión</option>
           <option value="reunion">🤝 Reunión</option>
           <option value="otro">📌 Otro</option>
@@ -241,7 +241,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
       <div><label class="block text-sm font-semibold mb-1">📝 Contenido *</label><textarea id="logT" required rows="4" class="w-full px-3 py-2 border rounded-lg"></textarea></div>
       <div class="flex gap-3 pt-2">
         <button type="button" onclick="document.getElementById('logModal').classList.add('hidden')" class="flex-1 py-2 border rounded-lg font-semibold">Cancelar</button>
-        <button type="submit" class="flex-1 py-2 bg-indigo-600 text-white rounded-lg font-semibold"> Guardar</button>
+        <button type="submit" class="flex-1 py-2 bg-indigo-600 text-white rounded-lg font-semibold">💾 Guardar</button>
       </div>
     </form>
   </div>
@@ -249,13 +249,13 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
 
 <div id="ulModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
   <div class="bg-white rounded-2xl p-6 max-w-lg w-full slide-in">
-    <h3 class="text-xl font-bold mb-4"> Desbloquear Fechas</h3>
+    <h3 class="text-xl font-bold mb-4">🔓 Desbloquear Fechas</h3>
     <p class="text-sm text-slate-500 mb-4">Permite editar estados en días pasados</p>
     <div class="space-y-4">
       <div><label class="block text-sm font-semibold mb-1">📅 Desde</label><input type="date" id="ulS" class="w-full px-3 py-2 border rounded-lg"></div>
-      <div><label class="block text-sm font-semibold mb-1"> Hasta</label><input type="date" id="ulE" class="w-full px-3 py-2 border rounded-lg"></div>
+      <div><label class="block text-sm font-semibold mb-1">📅 Hasta</label><input type="date" id="ulE" class="w-full px-3 py-2 border rounded-lg"></div>
       <div>
-        <label class="block text-sm font-semibold mb-2">👥 Aplicar a:</label>
+        <label class="block text-sm font-semibold mb-2"> Aplicar a:</label>
         <div class="space-y-2">
           <label class="flex items-center gap-2"><input type="radio" name="ulSc" value="gerencia" checked class="w-4 h-4"><span>Solo Gerencia</span></label>
           <label class="flex items-center gap-2"><input type="radio" name="ulSc" value="department" class="w-4 h-4"><span>Departamento actual</span></label>
@@ -266,7 +266,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
     </div>
     <div class="flex gap-3 mt-6">
       <button onclick="doUnlock()" class="flex-1 bg-emerald-500 text-white py-2 rounded-lg font-semibold">🔓 Desbloquear</button>
-      <button onclick="doReset()" class="flex-1 bg-slate-200 py-2 rounded-lg font-semibold">🔄 Restablecer</button>
+      <button onclick="doReset()" class="flex-1 bg-slate-200 py-2 rounded-lg font-semibold"> Restablecer</button>
       <button onclick="document.getElementById('ulModal').classList.add('hidden')" class="flex-1 bg-slate-100 py-2 rounded-lg font-semibold">Cerrar</button>
     </div>
   </div>
@@ -274,7 +274,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
 
 <div id="notifPanel" class="hidden fixed top-20 right-4 w-80 bg-white rounded-2xl shadow-2xl z-50 border max-h-96 overflow-y-auto slide-in">
   <div class="p-4 border-b flex items-center justify-between sticky top-0 bg-white">
-    <h3 class="font-bold">🔔 Notificaciones</h3>
+    <h3 class="font-bold"> Notificaciones</h3>
     <button onclick="markAll()" class="text-xs text-indigo-600 font-semibold">Marcar leídas</button>
   </div>
   <div id="notifList" class="p-2"></div>
@@ -299,7 +299,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
 
 <script>
 const DEPTS = {
-  tesoreria: { name: 'Tesorería', icon: '💰' },
+  tesoreria: { name: 'Tesorería', icon: '' },
   ctasctes: { name: 'Cuentas Corrientes', icon: '📋' },
   contabilidad: { name: 'Contabilidad', icon: '📊' },
   rrhh: { name: 'RRHH', icon: '👥' },
@@ -430,7 +430,7 @@ function doUnlock() {
 }
 function doReset() {
   localStorage.removeItem('tf_ul');
-  document.getElementById('ulSt').innerHTML = '<strong>️</strong> Bloqueado por defecto.';
+  document.getElementById('ulSt').innerHTML = '<strong>ℹ️</strong> Bloqueado por defecto.';
   document.getElementById('ulModal').classList.add('hidden');
   toast('🔄 Restablecido'); render();
 }
@@ -451,13 +451,13 @@ function rF(sec, opts = {}) {
         <button onclick="cF('${sec}')" class="text-xs px-3 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg font-semibold">🔄 Limpiar</button>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-        ${opts.search !== false ? `<div class="lg:col-span-2"><label class="block text-xs font-semibold text-slate-600 mb-1">🔍 BÚSQUEDA</label><input type="text" placeholder="Buscar..." value="${f.search || ''}" oninput="F['${sec}'].search=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"></div>` : ''}
-        ${opts.dept !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1"> DEPTO</label><select onchange="F['${sec}'].dept=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${dOpts}</select></div>` : ''}
+        ${opts.search !== false ? `<div class="lg:col-span-2"><label class="block text-xs font-semibold text-slate-600 mb-1"> BÚSQUEDA</label><input type="text" placeholder="Buscar..." value="${f.search || ''}" oninput="F['${sec}'].search=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"></div>` : ''}
+        ${opts.dept !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🏢 DEPTO</label><select onchange="F['${sec}'].dept=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${dOpts}</select></div>` : ''}
         ${opts.responsible !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👤 RESPONSABLE</label><select onchange="F['${sec}'].responsible=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${rOpts}</select></div>` : ''}
         ${opts.status !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📌 ESTADO</label><select onchange="F['${sec}'].status=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="pendiente" ${f.status === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option><option value="proceso" ${f.status === 'proceso' ? 'selected' : ''}>🔄 Proceso</option><option value="completada" ${f.status === 'completada' ? 'selected' : ''}>✅ Completada</option><option value="validated" ${f.status === 'validated' ? 'selected' : ''}>✓ Validada</option><option value="no_aplica" ${f.status === 'no_aplica' ? 'selected' : ''}>➖ No Aplica</option></select></div>` : ''}
-        ${opts.frequency !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔄 FRECUENCIA</label><select onchange="F['${sec}'].frequency=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="diaria" ${f.frequency === 'diaria' ? 'selected' : ''}>📅 Diaria</option><option value="semanal" ${f.frequency === 'semanal' ? 'selected' : ''}>📆 Semanal</option><option value="quincenal" ${f.frequency === 'quincenal' ? 'selected' : ''}>📆 Quincenal</option><option value="mensual" ${f.frequency === 'mensual' ? 'selected' : ''}>📅 Mensual</option><option value="ocasional" ${f.frequency === 'ocasional' ? 'selected' : ''}>🔁 Ocasional</option><option value="unica" ${f.frequency === 'unica' ? 'selected' : ''}>📌 Única</option></select></div>` : ''}
-        ${opts.roleLevel ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👔 NIVEL</label><select onchange="F['${sec}'].roleLevel=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="1" ${f.roleLevel === '1' ? 'selected' : ''}>🏢 Gerencia</option><option value="2" ${f.roleLevel === '2' ? 'selected' : ''}> Jefe</option><option value="3" ${f.roleLevel === '3' ? 'selected' : ''}>👤 Equipo</option></select></div>` : ''}
-        ${opts.category ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📂 CATEGORÍA</label><select onchange="F['${sec}'].category=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="general" ${f.category === 'general' ? 'selected' : ''}>📋 General</option><option value="incidencia" ${f.category === 'incidencia' ? 'selected' : ''}>⚠️ Incidencia</option><option value="observacion" ${f.category === 'observacion' ? 'selected' : ''}>👁️ Observación</option><option value="decision" ${f.category === 'decision' ? 'selected' : ''}>🎯 Decisión</option><option value="reunion" ${f.category === 'reunion' ? 'selected' : ''}> Reunión</option><option value="otro" ${f.category === 'otro' ? 'selected' : ''}>📌 Otro</option></select></div>` : ''}
+        ${opts.frequency !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1"> FRECUENCIA</label><select onchange="F['${sec}'].frequency=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="diaria" ${f.frequency === 'diaria' ? 'selected' : ''}>📅 Diaria</option><option value="semanal" ${f.frequency === 'semanal' ? 'selected' : ''}> Semanal</option><option value="quincenal" ${f.frequency === 'quincenal' ? 'selected' : ''}>📆 Quincenal</option><option value="mensual" ${f.frequency === 'mensual' ? 'selected' : ''}>📅 Mensual</option><option value="ocasional" ${f.frequency === 'ocasional' ? 'selected' : ''}>🔁 Ocasional</option><option value="unica" ${f.frequency === 'unica' ? 'selected' : ''}>📌 Única</option></select></div>` : ''}
+        ${opts.roleLevel ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👔 NIVEL</label><select onchange="F['${sec}'].roleLevel=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="1" ${f.roleLevel === '1' ? 'selected' : ''}> Gerencia</option><option value="2" ${f.roleLevel === '2' ? 'selected' : ''}>👔 Jefe</option><option value="3" ${f.roleLevel === '3' ? 'selected' : ''}>👤 Equipo</option></select></div>` : ''}
+        ${opts.category ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📂 CATEGORÍA</label><select onchange="F['${sec}'].category=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="general" ${f.category === 'general' ? 'selected' : ''}>📋 General</option><option value="incidencia" ${f.category === 'incidencia' ? 'selected' : ''}>️ Incidencia</option><option value="observacion" ${f.category === 'observacion' ? 'selected' : ''}>👁️ Observación</option><option value="decision" ${f.category === 'decision' ? 'selected' : ''}>🎯 Decisión</option><option value="reunion" ${f.category === 'reunion' ? 'selected' : ''}>🤝 Reunión</option><option value="otro" ${f.category === 'otro' ? 'selected' : ''}>📌 Otro</option></select></div>` : ''}
         ${opts.isAdmin ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔑 ADMIN</label><select onchange="F['${sec}'].isAdmin=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="true" ${f.isAdmin === 'true' ? 'selected' : ''}>✅ Admins</option><option value="false" ${f.isAdmin === 'false' ? 'selected' : ''}>👤 No Admins</option></select></div>` : ''}
       </div>
     </div>
@@ -467,13 +467,13 @@ function cF(s) { F[s] = { search: '', status: 'all', frequency: 'all', responsib
 
 function rTabs() {
   const tabs = [
-    { id: 'matrix', label: '📅 Matriz' },
+    { id: 'matrix', label: ' Matriz' },
     { id: 'dept', label: '📊 ' + (DEPTS[dept]?.name || dept) },
     { id: 'val', label: '✅ Validaciones' },
-    { id: 'log', label: '📝 Bitácora' },
+    { id: 'log', label: ' Bitácora' },
     { id: 'team', label: '👥 Equipo' }
   ];
-  if (prof.is_admin) tabs.push({ id: 'admin', label: '🔧 Admin' });
+  if (prof.is_admin) tabs.push({ id: 'admin', label: ' Admin' });
   document.getElementById('tabs').innerHTML = tabs.map(t => `
     <button onclick="go('${t.id}')" class="px-4 py-2 text-sm font-semibold rounded-lg whitespace-nowrap ${tab === t.id ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}">${t.label}</button>
   `).join('');
@@ -565,7 +565,7 @@ function rM(a) {
             <p class="text-3xl font-bold text-emerald-600">${cT.length}/${tT.length}</p>
           </div>
           <div class="bg-white rounded-xl p-4 border shadow-sm">
-            <p class="text-xs text-slate-500 font-semibold"> PEND. VALIDACIÓN</p>
+            <p class="text-xs text-slate-500 font-semibold">⏳ PEND. VALIDACIÓN</p>
             <p class="text-3xl font-bold text-orange-600">${pV.length}</p>
           </div>
           <div class="bg-white rounded-xl p-4 border shadow-sm">
@@ -578,7 +578,7 @@ function rM(a) {
           <div class="flex flex-wrap gap-2 text-xs">
             <span class="px-2 py-1 rounded st-comp">✅ Realizado</span>
             <span class="px-2 py-1 rounded st-proc">🔄 En proceso</span>
-            <span class="px-2 py-1 rounded st-pend">⏳ Pendiente</span>
+            <span class="px-2 py-1 rounded st-pend"> Pendiente</span>
             <span class="px-2 py-1 rounded st-val">✓ Validado</span>
             <span class="px-2 py-1 rounded st-na">➖ No Aplica</span>
             <span class="px-2 py-1 rounded bg-blue-200 text-blue-800">📅 Hoy (editable)</span>
@@ -590,7 +590,7 @@ function rM(a) {
     if (Object.keys(byD).length === 0) {
       h += `
         <div class="bg-white rounded-xl border p-12 text-center">
-          <div class="text-6xl mb-4"></div>
+          <div class="text-6xl mb-4">📋</div>
           <p class="text-slate-500 font-semibold text-lg">No hay tareas para mostrar</p>
           <p class="text-sm text-slate-400 mt-2">
             ${myLevel === 1 
@@ -678,9 +678,9 @@ function rM(a) {
                 }
               }
               
-const userDept = user?.department_id || did;
-// Gerencia (Nivel 1) siempre puede editar, otros necesitan desbloqueo
-const can = d === today || (d < today && (lvl() === 1 || isUnl(d, userDept)));
+              const userDept = user?.department_id || did;
+              // ✅ Gerencia (Nivel 1) siempre puede editar, otros necesitan desbloqueo
+              const can = d === today || (d < today && (lvl() === 1 || isUnl(d, userDept)));
               const tid = td ? td.id : tpl.id;
               const mode = td ? 'edit' : 'create';
               
@@ -692,7 +692,7 @@ const can = d === today || (d < today && (lvl() === 1 || isUnl(d, userDept)));
             
             h += `<td class="p-2 border-r">
               <div class="flex gap-2">
-                <button onclick="openT('${tpl.id}')" class="text-indigo-600 hover:text-indigo-800 text-xs" title="Editar">️</button>
+                <button onclick="openT('${tpl.id}')" class="text-indigo-600 hover:text-indigo-800 text-xs" title="Editar">✏️</button>
                 <button onclick="delT('${tpl.id}')" class="text-red-600 hover:text-red-800 text-xs" title="Eliminar">🗑️</button>
               </div>
             </td>`;
@@ -771,7 +771,7 @@ function rDept(a) {
                       <td class="p-3 text-sm">${t.due_date ? fmt(t.due_date) : '-'}</td>
                       <td class="p-3">
                         <select onchange="updateTaskStatus('${t.id}', this.value)" class="px-2 py-1 rounded-full text-xs font-semibold ${statusClass} border-0 cursor-pointer text-white">
-                          <option value="pendiente" ${t.status === 'pendiente' ? 'selected' : ''}> Pendiente</option>
+                          <option value="pendiente" ${t.status === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
                           <option value="proceso" ${t.status === 'proceso' ? 'selected' : ''}>🔄 Proceso</option>
                           <option value="completada" ${t.status === 'completada' ? 'selected' : ''}>✅ Completada</option>
                           <option value="no_aplica" ${t.status === 'no_aplica' ? 'selected' : ''}>➖ No Aplica</option>
@@ -844,7 +844,7 @@ function openUl() { updUlSt(); document.getElementById('ulModal').classList.remo
 
 function openM(tid, date, mode) {
   const t = tasks.find(x => x.id === tid);
-  if (!t) { toast(' No encontrada'); return; }
+  if (!t) { toast('❌ No encontrada'); return; }
   mTask = t; mDate = date; mMode = mode;
   document.getElementById('mDate').textContent = fmt(date);
   document.getElementById('mTask').textContent = t.title;
@@ -951,7 +951,7 @@ async function setStatus(ns) {
     } else {
       console.log('✏️ ACTUALIZANDO tarea ID:', mTask.id);
       result = await SB.from('tasks').update(ud).eq('id', mTask.id);
-      console.log(' Resultado UPDATE:', result);
+      console.log('📤 Resultado UPDATE:', result);
       
       if (result.error) {
         console.error('❌ Error UPDATE:', result.error);
@@ -965,9 +965,9 @@ async function setStatus(ns) {
     console.log('🔄 Cerrando modal y recargando...');
     closeM();
     
-    console.log('📥 Llamando a load()...');
+    console.log(' Llamando a load()...');
     await load();
-    console.log(' Tareas recargadas:', tasks.length);
+    console.log('📊 Tareas recargadas:', tasks.length);
     
     console.log('🎨 Llamando a render()...');
     render();
@@ -991,7 +991,7 @@ function rV(a) {
   const lv = lvl();
   const f = F.val;
   
-  console.log('🔍 rV llamado - Mi nivel:', lv, 'Mi depto:', dept);
+  console.log(' rV llamado - Mi nivel:', lv, 'Mi depto:', dept);
   
   let list = tasks.filter(t => 
     t && 
@@ -1074,13 +1074,13 @@ function rL(a) {
   if (f.search) { const q = f.search.toLowerCase(); list = list.filter(e => e.content && e.content.toLowerCase().includes(q)); }
   a.innerHTML = `
     <div class="fade-in max-w-5xl mx-auto">
-      <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold"> Mi Bitácora Personal</h2><p class="text-slate-500">Privada - solo tú la ves</p></div><button onclick="document.getElementById('logModal').classList.remove('hidden')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Nueva</button></div>
+      <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold">📝 Mi Bitácora Personal</h2><p class="text-slate-500">Privada - solo tú la ves</p></div><button onclick="document.getElementById('logModal').classList.remove('hidden')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Nueva</button></div>
       ${rF('log', { dept: false, status: false, frequency: false, responsible: false, category: true })}
       <div class="space-y-3">
         ${list.length === 0 ? `<div class="bg-white rounded-xl p-12 text-center border"><div class="text-6xl mb-4">📝</div><p class="text-slate-500 font-semibold">Vacía</p></div>` : list.map(e => `
           <div class="bg-white rounded-xl border p-4 hover:shadow-md transition-shadow">
             <div class="flex justify-between items-start mb-3">
-              <div class="flex items-center gap-2"><span class="text-xs px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-semibold">${e.category}</span><span class="text-xs text-slate-400"> ${fmt(e.entry_date)}</span></div>
+              <div class="flex items-center gap-2"><span class="text-xs px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-semibold">${e.category}</span><span class="text-xs text-slate-400">📅 ${fmt(e.entry_date)}</span></div>
               <button onclick="delL('${e.id}')" class="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-sm">🗑️</button>
             </div>
             <p class="text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">${esc(e.content)}</p>
@@ -1137,7 +1137,7 @@ function rA(a) {
           <thead class="bg-gray-50 border-b"><tr><th class="text-left p-3">Nombre</th><th class="text-left p-3">Email</th><th class="text-left p-3">Depto</th><th class="text-left p-3">Cargo</th><th class="text-left p-3">Nivel</th><th class="text-left p-3">Acciones</th></tr></thead>
           <tbody class="divide-y">
             ${list.map(p => {
-              const b = p.role_level === 1 ? '<span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">🏢 Gerencia</span>' : p.role_level === 2 ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs"> Jefe</span>' : '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs"> Equipo</span>';
+              const b = p.role_level === 1 ? '<span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">🏢 Gerencia</span>' : p.role_level === 2 ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">👔 Jefe</span>' : '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">👤 Equipo</span>';
               return `<tr class="hover:bg-gray-50"><td class="p-3 font-semibold">${p.full_name}</td><td class="p-3 text-sm text-gray-600">${p.email}</td><td class="p-3 text-sm">${DEPTS[p.department_id]?.icon || ''} ${DEPTS[p.department_id]?.name || p.department_id}</td><td class="p-3 text-sm">${p.role || '-'}</td><td class="p-3">${b} ${p.is_admin ? '<span class="ml-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Admin</span>' : ''}</td><td class="p-3"><div class="flex gap-2"><button onclick="editU('${p.id}')" class="text-indigo-600 hover:underline text-sm">✏️ Editar</button>${p.id !== me.id ? `<button onclick="delU('${p.id}')" class="text-red-600 hover:underline text-sm">🗑️</button>` : '<span class="text-gray-400 text-sm">(Tú)</span>'}</div></td></tr>`;
             }).join('')}
           </tbody>
@@ -1148,7 +1148,7 @@ function rA(a) {
 }
 
 function openU() { document.getElementById('uTitle').textContent = '➕ Crear Usuario'; document.getElementById('uBtn').textContent = 'Crear'; document.getElementById('uId').value = ''; document.getElementById('uForm').reset(); document.getElementById('uPF').style.display = 'block'; document.getElementById('uEmail').removeAttribute('readonly'); document.getElementById('uModal').classList.remove('hidden'); }
-function editU(id) { const u = users.find(p => p.id === id); if (!u) return; document.getElementById('uTitle').textContent = '️ Editar Usuario'; document.getElementById('uBtn').textContent = 'Guardar'; document.getElementById('uId').value = id; document.getElementById('uEmail').value = u.email; document.getElementById('uEmail').setAttribute('readonly', true); document.getElementById('uName2').value = u.full_name; document.getElementById('uDept').value = u.department_id; document.getElementById('uRole').value = u.role || ''; document.getElementById('uLvl').value = u.role_level || 3; document.getElementById('uAdm').checked = u.is_admin || false; document.getElementById('uPF').style.display = 'none'; document.getElementById('uModal').classList.remove('hidden'); }
+function editU(id) { const u = users.find(p => p.id === id); if (!u) return; document.getElementById('uTitle').textContent = '✏️ Editar Usuario'; document.getElementById('uBtn').textContent = 'Guardar'; document.getElementById('uId').value = id; document.getElementById('uEmail').value = u.email; document.getElementById('uEmail').setAttribute('readonly', true); document.getElementById('uName2').value = u.full_name; document.getElementById('uDept').value = u.department_id; document.getElementById('uRole').value = u.role || ''; document.getElementById('uLvl').value = u.role_level || 3; document.getElementById('uAdm').checked = u.is_admin || false; document.getElementById('uPF').style.display = 'none'; document.getElementById('uModal').classList.remove('hidden'); }
 
 document.getElementById('uForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -1198,3 +1198,4 @@ document.addEventListener('click', (e) => {
 </script>
 </body>
 </html>
+
