@@ -112,7 +112,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
           <option value="ctasctes">📋 Cuentas Corrientes</option>
           <option value="contabilidad">📊 Contabilidad</option>
           <option value="rrhh">👥 RRHH</option>
-          <option value="gerencia">🏢 Gerencia</option>
+          <option value="gerencia"> Gerencia</option>
         </select>
       </div>
       <div class="grid grid-cols-2 gap-3">
@@ -155,9 +155,9 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
     <div id="mAct" class="mb-3 text-xs font-semibold px-3 py-2 rounded-lg"></div>
     <div id="mButtons" class="space-y-2">
       <button onclick="setStatus('pendiente')" class="w-full px-4 py-3 bg-red-500 text-white rounded-lg font-semibold">⏳ Pendiente</button>
-      <button onclick="setStatus('proceso')" class="w-full px-4 py-3 bg-yellow-500 text-white rounded-lg font-semibold"> En proceso</button>
+      <button onclick="setStatus('proceso')" class="w-full px-4 py-3 bg-yellow-500 text-white rounded-lg font-semibold">🔄 En proceso</button>
       <button onclick="setStatus('completada')" class="w-full px-4 py-3 bg-emerald-500 text-white rounded-lg font-semibold">✅ Realizado</button>
-      <button onclick="showNoAplicaModal()" class="w-full px-4 py-3 bg-orange-500 text-white rounded-lg font-semibold"> No Aplica</button>
+      <button onclick="showNoAplicaModal()" class="w-full px-4 py-3 bg-orange-500 text-white rounded-lg font-semibold">➖ No Aplica</button>
       <button onclick="closeM()" class="w-full px-4 py-3 bg-slate-200 text-slate-700 rounded-lg font-semibold">Cancelar</button>
     </div>
     <div id="noAplicaSection" class="hidden mt-4 pt-4 border-t">
@@ -199,7 +199,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
           <option value="tesoreria">💰 Tesorería</option>
           <option value="ctasctes">📋 Cuentas Corrientes</option>
           <option value="contabilidad">📊 Contabilidad</option>
-          <option value="rrhh">👥 RRHH</option>
+          <option value="rrhh"> RRHH</option>
           <option value="gerencia">🏢 Gerencia</option>
         </select>
       </div>
@@ -208,7 +208,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
         <select id="uLvl" required class="w-full px-3 py-2 border rounded-lg">
           <option value="3">👤 Equipo (Nivel 3)</option>
           <option value="2">👔 Jefe (Nivel 2)</option>
-          <option value="1"> Gerencia (Nivel 1)</option>
+          <option value="1">🏢 Gerencia (Nivel 1)</option>
         </select>
       </div>
       <label class="flex items-center gap-2 p-3 bg-slate-50 rounded-lg">
@@ -231,7 +231,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
       <div><label class="block text-sm font-semibold mb-1">📂 Categoría</label>
         <select id="logC" class="w-full px-3 py-2 border rounded-lg">
           <option value="general">📋 General</option>
-          <option value="incidencia">️ Incidencia</option>
+          <option value="incidencia">⚠️ Incidencia</option>
           <option value="observacion">👁️ Observación</option>
           <option value="decision">🎯 Decisión</option>
           <option value="reunion">🤝 Reunión</option>
@@ -255,7 +255,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
       <div><label class="block text-sm font-semibold mb-1">📅 Desde</label><input type="date" id="ulS" class="w-full px-3 py-2 border rounded-lg"></div>
       <div><label class="block text-sm font-semibold mb-1">📅 Hasta</label><input type="date" id="ulE" class="w-full px-3 py-2 border rounded-lg"></div>
       <div>
-        <label class="block text-sm font-semibold mb-2"> Aplicar a:</label>
+        <label class="block text-sm font-semibold mb-2">👥 Aplicar a:</label>
         <div class="space-y-2">
           <label class="flex items-center gap-2"><input type="radio" name="ulSc" value="gerencia" checked class="w-4 h-4"><span>Solo Gerencia</span></label>
           <label class="flex items-center gap-2"><input type="radio" name="ulSc" value="department" class="w-4 h-4"><span>Departamento actual</span></label>
@@ -265,8 +265,8 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
       <div id="ulSt" class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-900"><strong>ℹ️</strong> Fechas bloqueadas por defecto.</div>
     </div>
     <div class="flex gap-3 mt-6">
-      <button onclick="doUnlock()" class="flex-1 bg-emerald-500 text-white py-2 rounded-lg font-semibold">🔓 Desbloquear</button>
-      <button onclick="doReset()" class="flex-1 bg-slate-200 py-2 rounded-lg font-semibold"> Restablecer</button>
+      <button onclick="doUnlock()" class="flex-1 bg-emerald-500 text-white py-2 rounded-lg font-semibold"> Desbloquear</button>
+      <button onclick="doReset()" class="flex-1 bg-slate-200 py-2 rounded-lg font-semibold">🔄 Restablecer</button>
       <button onclick="document.getElementById('ulModal').classList.add('hidden')" class="flex-1 bg-slate-100 py-2 rounded-lg font-semibold">Cerrar</button>
     </div>
   </div>
@@ -274,7 +274,7 @@ const SB = supabase.createClient('https://vktytlowvedfolvsypma.supabase.co', 'ey
 
 <div id="notifPanel" class="hidden fixed top-20 right-4 w-80 bg-white rounded-2xl shadow-2xl z-50 border max-h-96 overflow-y-auto slide-in">
   <div class="p-4 border-b flex items-center justify-between sticky top-0 bg-white">
-    <h3 class="font-bold"> Notificaciones</h3>
+    <h3 class="font-bold">🔔 Notificaciones</h3>
     <button onclick="markAll()" class="text-xs text-indigo-600 font-semibold">Marcar leídas</button>
   </div>
   <div id="notifList" class="p-2"></div>
@@ -361,9 +361,7 @@ async function load() {
     ]);
     tasks = t.data || []; users = p.data || []; notifs = n.data || []; msgs = m.data || []; logs = l.data || [];
     updB();
-  } catch (err) {
-    console.error('Error loading data:', err);
-  }
+  } catch (err) { console.error('Error loading:', err); }
 }
 
 function startPoll() {
@@ -451,13 +449,13 @@ function rF(sec, opts = {}) {
         <button onclick="cF('${sec}')" class="text-xs px-3 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg font-semibold">🔄 Limpiar</button>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-        ${opts.search !== false ? `<div class="lg:col-span-2"><label class="block text-xs font-semibold text-slate-600 mb-1"> BÚSQUEDA</label><input type="text" placeholder="Buscar..." value="${f.search || ''}" oninput="F['${sec}'].search=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"></div>` : ''}
+        ${opts.search !== false ? `<div class="lg:col-span-2"><label class="block text-xs font-semibold text-slate-600 mb-1">🔍 BÚSQUEDA</label><input type="text" placeholder="Buscar..." value="${f.search || ''}" oninput="F['${sec}'].search=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"></div>` : ''}
         ${opts.dept !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🏢 DEPTO</label><select onchange="F['${sec}'].dept=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${dOpts}</select></div>` : ''}
-        ${opts.responsible !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👤 RESPONSABLE</label><select onchange="F['${sec}'].responsible=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${rOpts}</select></div>` : ''}
+        ${opts.responsible !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1"> RESPONSABLE</label><select onchange="F['${sec}'].responsible=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option>${rOpts}</select></div>` : ''}
         ${opts.status !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📌 ESTADO</label><select onchange="F['${sec}'].status=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="pendiente" ${f.status === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option><option value="proceso" ${f.status === 'proceso' ? 'selected' : ''}>🔄 Proceso</option><option value="completada" ${f.status === 'completada' ? 'selected' : ''}>✅ Completada</option><option value="validated" ${f.status === 'validated' ? 'selected' : ''}>✓ Validada</option><option value="no_aplica" ${f.status === 'no_aplica' ? 'selected' : ''}>➖ No Aplica</option></select></div>` : ''}
-        ${opts.frequency !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1"> FRECUENCIA</label><select onchange="F['${sec}'].frequency=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="diaria" ${f.frequency === 'diaria' ? 'selected' : ''}>📅 Diaria</option><option value="semanal" ${f.frequency === 'semanal' ? 'selected' : ''}> Semanal</option><option value="quincenal" ${f.frequency === 'quincenal' ? 'selected' : ''}>📆 Quincenal</option><option value="mensual" ${f.frequency === 'mensual' ? 'selected' : ''}>📅 Mensual</option><option value="ocasional" ${f.frequency === 'ocasional' ? 'selected' : ''}>🔁 Ocasional</option><option value="unica" ${f.frequency === 'unica' ? 'selected' : ''}>📌 Única</option></select></div>` : ''}
-        ${opts.roleLevel ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👔 NIVEL</label><select onchange="F['${sec}'].roleLevel=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="1" ${f.roleLevel === '1' ? 'selected' : ''}> Gerencia</option><option value="2" ${f.roleLevel === '2' ? 'selected' : ''}>👔 Jefe</option><option value="3" ${f.roleLevel === '3' ? 'selected' : ''}>👤 Equipo</option></select></div>` : ''}
-        ${opts.category ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📂 CATEGORÍA</label><select onchange="F['${sec}'].category=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="general" ${f.category === 'general' ? 'selected' : ''}>📋 General</option><option value="incidencia" ${f.category === 'incidencia' ? 'selected' : ''}>️ Incidencia</option><option value="observacion" ${f.category === 'observacion' ? 'selected' : ''}>👁️ Observación</option><option value="decision" ${f.category === 'decision' ? 'selected' : ''}>🎯 Decisión</option><option value="reunion" ${f.category === 'reunion' ? 'selected' : ''}>🤝 Reunión</option><option value="otro" ${f.category === 'otro' ? 'selected' : ''}>📌 Otro</option></select></div>` : ''}
+        ${opts.frequency !== false ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔄 FRECUENCIA</label><select onchange="F['${sec}'].frequency=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="diaria" ${f.frequency === 'diaria' ? 'selected' : ''}>📅 Diaria</option><option value="semanal" ${f.frequency === 'semanal' ? 'selected' : ''}>📆 Semanal</option><option value="quincenal" ${f.frequency === 'quincenal' ? 'selected' : ''}>📆 Quincenal</option><option value="mensual" ${f.frequency === 'mensual' ? 'selected' : ''}>📅 Mensual</option><option value="ocasional" ${f.frequency === 'ocasional' ? 'selected' : ''}>🔁 Ocasional</option><option value="unica" ${f.frequency === 'unica' ? 'selected' : ''}>📌 Única</option></select></div>` : ''}
+        ${opts.roleLevel ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">👔 NIVEL</label><select onchange="F['${sec}'].roleLevel=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="1" ${f.roleLevel === '1' ? 'selected' : ''}>🏢 Gerencia</option><option value="2" ${f.roleLevel === '2' ? 'selected' : ''}> Jefe</option><option value="3" ${f.roleLevel === '3' ? 'selected' : ''}>👤 Equipo</option></select></div>` : ''}
+        ${opts.category ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">📂 CATEGORÍA</label><select onchange="F['${sec}'].category=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todas</option><option value="general" ${f.category === 'general' ? 'selected' : ''}>📋 General</option><option value="incidencia" ${f.category === 'incidencia' ? 'selected' : ''}>⚠️ Incidencia</option><option value="observacion" ${f.category === 'observacion' ? 'selected' : ''}>👁️ Observación</option><option value="decision" ${f.category === 'decision' ? 'selected' : ''}>🎯 Decisión</option><option value="reunion" ${f.category === 'reunion' ? 'selected' : ''}>🤝 Reunión</option><option value="otro" ${f.category === 'otro' ? 'selected' : ''}>📌 Otro</option></select></div>` : ''}
         ${opts.isAdmin ? `<div><label class="block text-xs font-semibold text-slate-600 mb-1">🔑 ADMIN</label><select onchange="F['${sec}'].isAdmin=this.value;render()" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"><option value="all">Todos</option><option value="true" ${f.isAdmin === 'true' ? 'selected' : ''}>✅ Admins</option><option value="false" ${f.isAdmin === 'false' ? 'selected' : ''}>👤 No Admins</option></select></div>` : ''}
       </div>
     </div>
@@ -467,13 +465,13 @@ function cF(s) { F[s] = { search: '', status: 'all', frequency: 'all', responsib
 
 function rTabs() {
   const tabs = [
-    { id: 'matrix', label: ' Matriz' },
+    { id: 'matrix', label: '📅 Matriz' },
     { id: 'dept', label: '📊 ' + (DEPTS[dept]?.name || dept) },
     { id: 'val', label: '✅ Validaciones' },
-    { id: 'log', label: ' Bitácora' },
+    { id: 'log', label: '📝 Bitácora' },
     { id: 'team', label: '👥 Equipo' }
   ];
-  if (prof.is_admin) tabs.push({ id: 'admin', label: ' Admin' });
+  if (prof.is_admin) tabs.push({ id: 'admin', label: '🔧 Admin' });
   document.getElementById('tabs').innerHTML = tabs.map(t => `
     <button onclick="go('${t.id}')" class="px-4 py-2 text-sm font-semibold rounded-lg whitespace-nowrap ${tab === t.id ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}">${t.label}</button>
   `).join('');
@@ -582,29 +580,18 @@ function rM(a) {
             <span class="px-2 py-1 rounded st-val">✓ Validado</span>
             <span class="px-2 py-1 rounded st-na">➖ No Aplica</span>
             <span class="px-2 py-1 rounded bg-blue-200 text-blue-800">📅 Hoy (editable)</span>
-            <span class="px-2 py-1 rounded bg-slate-300 text-slate-700">🔒 Bloqueado</span>
+            <span class="px-2 py-1 rounded bg-slate-300 text-slate-700"> Bloqueado</span>
           </div>
         </div>
     `;
     
     if (Object.keys(byD).length === 0) {
-      h += `
-        <div class="bg-white rounded-xl border p-12 text-center">
-          <div class="text-6xl mb-4">📋</div>
-          <p class="text-slate-500 font-semibold text-lg">No hay tareas para mostrar</p>
-          <p class="text-sm text-slate-400 mt-2">
-            ${myLevel === 1 
-              ? 'Como Gerencia, puedes ver todas las tareas. Usa el filtro "🏢 DEPTO" para seleccionar un departamento específico.' 
-              : 'Crea una nueva tarea para comenzar'}
-          </p>
-        </div>`;
+      h += `<div class="bg-white rounded-xl border p-12 text-center"><div class="text-6xl mb-4"></div><p class="text-slate-500 font-semibold text-lg">No hay tareas para mostrar</p></div>`;
     } else {
       Object.keys(byD).forEach(did => {
         const deptInfo = DEPTS[did] || { name: did, icon: '📁' };
         h += `<div class="mb-6">
-          <div class="bg-slate-800 text-white rounded-t-lg p-3 font-bold text-lg">
-            ${deptInfo.icon} ${deptInfo.name}
-          </div>
+          <div class="bg-slate-800 text-white rounded-t-lg p-3 font-bold text-lg">${deptInfo.icon} ${deptInfo.name}</div>
           <div class="bg-white rounded-b-lg border overflow-hidden">`;
         
         Object.values(byD[did]).forEach(({ user, tasks: ut }) => {
@@ -643,29 +630,17 @@ function rM(a) {
               <td class="p-2 border-r">${freq}</td>`;
             
             dates.forEach(d => {
-              // Convertir fecha de matriz a formato YYYY-MM-DD
-const matrixDate = new Date(d).toISOString().split('T')[0];
-
-// Buscar tarea con fecha coincidente
-const td = ut.find(t => {
-  if (!t.due_date) return false;
-  const taskDate = new Date(t.due_date).toISOString().split('T')[0];
-  return t.title === title && taskDate === matrixDate;
-});
+              const td = ut.find(t => t.title === title && t.due_date === d);
               
-              // 🎯 CORRECCIÓN PARA TAREAS ÚNICAS
+              //  TAREAS ÚNICAS: Solo mostrar en fecha exacta
               if (tpl.frequency === 'unica') {
                 const taskDueDate = tpl.due_date || tpl.start_date;
                 if (d !== taskDueDate) {
-                  h += `<td class="p-1 text-center border-r cell-fut">
-                    <span class="px-2 py-1 rounded text-[10px] font-semibold">-</span>
-                  </td>`;
+                  h += `<td class="p-1 text-center border-r cell-fut"><span class="px-2 py-1 rounded text-[10px] font-semibold">-</span></td>`;
                   return;
                 }
                 if (d < today && td && ['completada', 'validated', 'no_aplica'].includes(td.status)) {
-                  h += `<td class="p-1 text-center border-r cell-fut">
-                    <span class="px-2 py-1 rounded text-[10px] font-semibold">-</span>
-                  </td>`;
+                  h += `<td class="p-1 text-center border-r cell-fut"><span class="px-2 py-1 rounded text-[10px] font-semibold">-</span></td>`;
                   return;
                 }
               }
@@ -675,33 +650,27 @@ const td = ut.find(t => {
               if (d < sd) { 
                 st = 'futura'; txt = '⏪'; cls = 'cell-fut'; 
               } else if (td) {
-                if (td.validation_status === 'validated') { 
-                  st = 'validated'; txt = '✓'; cls = 'st-val'; 
-                } else if (td.status === 'no_aplica') { 
-                  st = 'no_aplica'; txt = 'N/A'; cls = 'st-na'; 
-                } else if (td.status === 'completada') { 
-                  st = 'completada'; txt = '✓'; cls = 'st-comp'; 
-                } else if (td.status === 'proceso') { 
-                  st = 'proceso'; txt = '⚙'; cls = 'st-proc'; 
-                }
+                if (td.validation_status === 'validated') { st = 'validated'; txt = '✓'; cls = 'st-val'; }
+                else if (td.status === 'no_aplica') { st = 'no_aplica'; txt = 'N/A'; cls = 'st-na'; }
+                else if (td.status === 'completada') { st = 'completada'; txt = '✓'; cls = 'st-comp'; }
+                else if (td.status === 'proceso') { st = 'proceso'; txt = '⚙'; cls = 'st-proc'; }
               }
               
               const userDept = user?.department_id || did;
-              // ✅ Gerencia (Nivel 1) siempre puede editar, otros necesitan desbloqueo
+              // ✅ Gerencia siempre puede editar días pasados
               const can = d === today || (d < today && (lvl() === 1 || isUnl(d, userDept)));
               const tid = td ? td.id : tpl.id;
               const mode = td ? 'edit' : 'create';
               
-              h += `<td class="p-1 text-center border-r ${can ? 'cell-ok' : 'cell-no'}" 
-                   ${can ? `onclick="openM('${tid}','${d}','${mode}')"` : ''}>
+              h += `<td class="p-1 text-center border-r ${can ? 'cell-ok' : 'cell-no'}" ${can ? `onclick="openM('${tid}','${d}','${mode}')"` : ''}>
                 <span class="${cls} px-2 py-1 rounded text-[10px] font-semibold">${txt}</span>
               </td>`;
             });
             
             h += `<td class="p-2 border-r">
               <div class="flex gap-2">
-                <button onclick="openT('${tpl.id}')" class="text-indigo-600 hover:text-indigo-800 text-xs" title="Editar">✏️</button>
-                <button onclick="delT('${tpl.id}')" class="text-red-600 hover:text-red-800 text-xs" title="Eliminar">🗑️</button>
+                <button onclick="openT('${tpl.id}')" class="text-indigo-600 hover:text-indigo-800 text-xs">✏️</button>
+                <button onclick="delT('${tpl.id}')" class="text-red-600 hover:text-red-800 text-xs">🗑️</button>
               </div>
             </td>`;
             h += `</tr>`;
@@ -896,10 +865,7 @@ async function confirmNoAplica() {
 }
 
 async function setStatus(ns) {
-  console.log('🔄 setStatus llamado con:', { ns, mTaskId: mTask?.id, mDate, mMode });
-  
   if (!mTask || !mDate) {
-    console.error('❌ Faltan datos:', { mTask, mDate });
     toast('❌ Error: datos incompletos');
     return;
   }
@@ -923,14 +889,13 @@ async function setStatus(ns) {
       ud.validated_by = null;
     }
     
-    // Agregar observación si es no_aplica
+    // ✅ Guardar observación en description (no en columna inexistente)
     if (ns === 'no_aplica') {
       const obs = localStorage.getItem('noAplicaObservation') || '';
-      ud.no_aplica_observation = obs;
+      const currentDesc = mTask.description || '';
+      ud.description = currentDesc ? currentDesc + ' | NO APLICA: ' + obs : 'NO APLICA: ' + obs;
       localStorage.removeItem('noAplicaObservation');
     }
-    
-    console.log('📦 Datos a enviar:', ud);
     
     let result;
     
@@ -944,62 +909,37 @@ async function setStatus(ns) {
       ud.created_by = me.id;
       ud.title = mTask.title;
       
-      console.log('📝 INSERTANDO nueva tarea...');
       result = await SB.from('tasks').insert(ud);
-      console.log('📤 Resultado INSERT:', result);
-      
       if (result.error) {
-        console.error('❌ Error INSERT:', result.error);
         toast('❌ Error al crear: ' + result.error.message);
         return;
       }
-      
-      console.log('✅ Insertado correctamente');
-      
     } else {
-      console.log('✏️ ACTUALIZANDO tarea ID:', mTask.id);
       result = await SB.from('tasks').update(ud).eq('id', mTask.id);
-      console.log('📤 Resultado UPDATE:', result);
-      
       if (result.error) {
-        console.error('❌ Error UPDATE:', result.error);
         toast('❌ Error al actualizar: ' + result.error.message);
         return;
       }
-      
-      console.log('✅ Actualizado correctamente');
     }
     
-    console.log('🔄 Cerrando modal y recargando...');
     closeM();
-    
-    console.log(' Llamando a load()...');
     await load();
-    console.log('📊 Tareas recargadas:', tasks.length);
-    
-    console.log('🎨 Llamando a render()...');
     render();
-    
     toast('✅ Estado actualizado');
-    console.log('✅ Proceso completado');
     
   } catch (err) {
-    console.error('❌ ERROR COMPLETO:', err);
-    console.error('Stack:', err.stack);
     toast('❌ Error: ' + err.message);
   }
 }
 
 function rV(a) {
   if (!canV()) { 
-    a.innerHTML = `<div class="text-center py-16"><div class="text-6xl mb-4">🔒</div><h2 class="text-2xl font-bold">Acceso Restringido</h2><p>Solo Jefes y Gerencia</p></div>`; 
+    a.innerHTML = `<div class="text-center py-16"><div class="text-6xl mb-4"></div><h2 class="text-2xl font-bold">Acceso Restringido</h2><p>Solo Jefes y Gerencia</p></div>`; 
     return; 
   }
   
   const lv = lvl();
   const f = F.val;
-  
-  console.log(' rV llamado - Mi nivel:', lv, 'Mi depto:', dept);
   
   let list = tasks.filter(t => 
     t && 
@@ -1008,26 +948,13 @@ function rV(a) {
     (!t.validation_status || t.validation_status === 'pending')
   );
   
-  console.log('📋 Tareas completadas pendientes:', list.length);
-  
   if (lv === 2) {
-    console.log('👔 Soy Jefe - Buscando tareas de mi equipo (Nivel 3) en mi departamento');
-    const teamIds = users
-      .filter(p => p.department_id === dept && lvl(p) === 3)
-      .map(p => p.id);
-    console.log('👥 Mi equipo:', teamIds);
+    const teamIds = users.filter(p => p.department_id === dept && lvl(p) === 3).map(p => p.id);
     list = list.filter(t => teamIds.includes(t.assignee_id));
-    
   } else if (lv === 1) {
-    console.log('🏢 Soy Gerencia - Buscando tareas de Jefes y Equipo de todos los deptos');
-    const allValidatableIds = users
-      .filter(p => lvl(p) === 2 || lvl(p) === 3)
-      .map(p => p.id);
-    console.log('👥 Usuarios validables:', allValidatableIds);
+    const allValidatableIds = users.filter(p => lvl(p) === 2 || lvl(p) === 3).map(p => p.id);
     list = list.filter(t => allValidatableIds.includes(t.assignee_id));
   }
-  
-  console.log('✅ Tareas después de filtros jerárquicos:', list.length);
   
   if (f.responsible && f.responsible !== 'all') list = list.filter(t => t.assignee_id === f.responsible);
   if (f.search) { 
@@ -1035,13 +962,11 @@ function rV(a) {
     list = list.filter(t => t.title && t.title.toLowerCase().includes(q)); 
   }
   
-  console.log('📊 Tareas finales a mostrar:', list.length);
-  
   a.innerHTML = `
     <div class="fade-in max-w-5xl mx-auto">
       <h2 class="text-2xl font-bold mb-6">✅ Validaciones Pendientes (${list.length})</h2>
       ${rF('val', { dept: false, status: false, frequency: false })}
-      ${list.length === 0 ? '<div class="bg-white rounded-xl p-12 text-center border"><p class="text-slate-500">🎉 Sin pendientes de validación</p></div>' :
+      ${list.length === 0 ? '<div class="bg-white rounded-xl p-12 text-center border"><p class="text-slate-500"> Sin pendientes de validación</p></div>' :
       `<div class="space-y-3">${list.map(t => {
         const u = users.find(p=>p.id===t.assignee_id);
         const ul = u ? lvl(u) : 3;
@@ -1051,7 +976,7 @@ function rV(a) {
         return `<div class="bg-white rounded-xl border p-4 flex justify-between items-center">
           <div>
             <h3 class="font-bold">${esc(t.title)}</h3>
-            <p class="text-sm text-slate-600 mt-1">👤 ${u?.full_name||'?'} · ${b} · 📅 ${t.completed_at?fmt(t.completed_at):'Sin fecha'}</p>
+            <p class="text-sm text-slate-600 mt-1">👤 ${u?.full_name||'?'} · ${b} ·  ${t.completed_at?fmt(t.completed_at):'Sin fecha'}</p>
             <p class="text-xs text-slate-500 mt-1">🏢 ${DEPTS[u?.department_id]?.name || ''}</p>
           </div>
           <button onclick="openV('${t.id}')" class="px-4 py-2 bg-indigo-500 text-white rounded-lg">Validar</button>
@@ -1082,7 +1007,7 @@ function rL(a) {
   if (f.search) { const q = f.search.toLowerCase(); list = list.filter(e => e.content && e.content.toLowerCase().includes(q)); }
   a.innerHTML = `
     <div class="fade-in max-w-5xl mx-auto">
-      <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold">📝 Mi Bitácora Personal</h2><p class="text-slate-500">Privada - solo tú la ves</p></div><button onclick="document.getElementById('logModal').classList.remove('hidden')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Nueva</button></div>
+      <div class="flex items-center justify-between mb-6"><div><h2 class="text-2xl font-bold"> Mi Bitácora Personal</h2><p class="text-slate-500">Privada - solo tú la ves</p></div><button onclick="document.getElementById('logModal').classList.remove('hidden')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">➕ Nueva</button></div>
       ${rF('log', { dept: false, status: false, frequency: false, responsible: false, category: true })}
       <div class="space-y-3">
         ${list.length === 0 ? `<div class="bg-white rounded-xl p-12 text-center border"><div class="text-6xl mb-4">📝</div><p class="text-slate-500 font-semibold">Vacía</p></div>` : list.map(e => `
@@ -1145,7 +1070,7 @@ function rA(a) {
           <thead class="bg-gray-50 border-b"><tr><th class="text-left p-3">Nombre</th><th class="text-left p-3">Email</th><th class="text-left p-3">Depto</th><th class="text-left p-3">Cargo</th><th class="text-left p-3">Nivel</th><th class="text-left p-3">Acciones</th></tr></thead>
           <tbody class="divide-y">
             ${list.map(p => {
-              const b = p.role_level === 1 ? '<span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">🏢 Gerencia</span>' : p.role_level === 2 ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">👔 Jefe</span>' : '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">👤 Equipo</span>';
+              const b = p.role_level === 1 ? '<span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs"> Gerencia</span>' : p.role_level === 2 ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">👔 Jefe</span>' : '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">👤 Equipo</span>';
               return `<tr class="hover:bg-gray-50"><td class="p-3 font-semibold">${p.full_name}</td><td class="p-3 text-sm text-gray-600">${p.email}</td><td class="p-3 text-sm">${DEPTS[p.department_id]?.icon || ''} ${DEPTS[p.department_id]?.name || p.department_id}</td><td class="p-3 text-sm">${p.role || '-'}</td><td class="p-3">${b} ${p.is_admin ? '<span class="ml-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Admin</span>' : ''}</td><td class="p-3"><div class="flex gap-2"><button onclick="editU('${p.id}')" class="text-indigo-600 hover:underline text-sm">✏️ Editar</button>${p.id !== me.id ? `<button onclick="delU('${p.id}')" class="text-red-600 hover:underline text-sm">🗑️</button>` : '<span class="text-gray-400 text-sm">(Tú)</span>'}</div></td></tr>`;
             }).join('')}
           </tbody>
@@ -1206,4 +1131,5 @@ document.addEventListener('click', (e) => {
 </script>
 </body>
 </html>
+
 
